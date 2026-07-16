@@ -9,7 +9,7 @@ const path = require("path");
 
 const ofcontroller = require("./controller/OfficerController");
 
-PORT = process.env.PORT;
+PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
