@@ -9,3 +9,4 @@ CREATE TABLE NEA_Officer ( -- FIXED: Added Underscore to match Logical Design
     OfficerRoles VarChar(255) NOT NULL CONSTRAINT CHK_OfficerRoles CHECK (OfficerRoles IN ('Health', 'Inspection', 'Compliance', 'Operations', 'Enforcement')),
     OfficerStatus VarChar(255) NOT NULL CONSTRAINT CHK_OfficerStatus CHECK (OfficerStatus IN ('Active', 'Inactive', 'Suspended', 'Resigned'))
 );
+
