@@ -68,7 +68,6 @@ async function createUser(dbData) {
       const nextNumber = currentNumber + 1; // 10 -> 11
       nextOfficerID = "OFF" + String(nextNumber).padStart(3, "0"); // 11 -> 'OFF011'
     }
-
     // 3. Insert Query (No SCOPE_IDENTITY() since we generate the ID manually)
     const query = `
       INSERT INTO NEA_Officer (
