@@ -101,8 +101,8 @@ async function createUser(dbData) {
     request.input("OfficerUsername", sql.VarChar, OfficerUsername);
     request.input("OfficerPasswordHashed", sql.VarChar, OfficerPasswordHashed);
     request.input("OfficerContactNo", sql.VarChar, OfficerContactNo);
-    request.input("OfficerRoles", sql.VarChar(255), OfficerRoles);
-    request.input("OfficerStatus", sql.VarChar(255), OfficerStatus);
+    request.input("OfficerRoles", sql.VarChar(11), OfficerRoles);
+    request.input("OfficerStatus", sql.VarChar(10), OfficerStatus);
 
     await request.query(query);
 
