@@ -21,7 +21,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/NEAofficers", ofcontroller.getAllUsers);
 
-app.post("/createNEAOfficer", ofmiddleware.validateuser, ofcontroller.);
+app.post(
+  "/createNEAOfficer",
+  ofmiddleware.validateuser,
+  ofcontroller.createUser,
+);
 
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);
