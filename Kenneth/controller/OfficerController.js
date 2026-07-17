@@ -33,7 +33,7 @@ async function createUser(req, res) {
     OfficerStatus,
   } = req.body || {};
 
-  console.log("Extracted OfficerName:", OfficerName);
+  //console.log("Extracted OfficerName:", OfficerName);
 
   try {
     // Name Validation
