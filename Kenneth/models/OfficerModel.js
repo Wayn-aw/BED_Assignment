@@ -25,6 +25,7 @@ async function getAllUsers() {
 }
 
 async function createUser(dbData) {
+  //console.log("Model received:", dbData);
   let {
     OfficerName,
     OfficerUsername,
