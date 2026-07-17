@@ -1,24 +1,30 @@
 const express = require("express");
-
 const app = express();
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json");
 
 const sql = require("mssql");
 require("dotenv").config();
-
 const path = require("path");
-
-const ofcontroller = require("./controller/OfficerController");
-
-PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+const ofcontroller = require("./controller/OfficerController");
+const ofmiddleware = require("./middleware/Officer");
+
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/NEAofficers", ofcontroller.getAllUsers);
 
+app.post(
+  "/createNEAOfficer",
+  ofmiddleware.validateuser,
+  ofcontroller.createUser,
+);
+PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);
 });

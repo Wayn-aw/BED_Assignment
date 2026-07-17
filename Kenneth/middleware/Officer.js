@@ -2,6 +2,10 @@ const Joi = require("joi"); // Import Joi for validation
 
 // Validation schema for users (used for POST/PUT)
 const userSchema = Joi.object({
+  OfficerName: Joi.string().required().messages({
+    "string.empty": "OfficerName cannot be empty",
+    "any.required": "OfficerName is required",
+  }),
   OfficerUsername: Joi.string().alphanum().min(1).max(255).required().messages({
     "string.base": "username must be a string",
     "string.empty": "username cannot be empty",
@@ -10,7 +14,8 @@ const userSchema = Joi.object({
     "string.max": "username cannot exceed 255 characters",
     "any.required": "username is required",
   }),
-  OfficerPasswordHashed: Joi.string()
+  // FIX 1: Changed to OfficerPassword (since client sends raw password before hashing!)
+  OfficerPassword: Joi.string()
     .pattern(/[a-z]/, "lowercase")
     .pattern(/[A-Z]/, "uppercase")
     .pattern(/[0-9]/, "number")
@@ -19,28 +24,39 @@ const userSchema = Joi.object({
     .max(255)
     .required()
     .messages({
-      "string.base": "PasswordHashed must be a string",
-      "string.empty": "PasswordHashed cannot be empty",
+      "string.base": "Password must be a string",
+      "string.empty": "Password cannot be empty",
       "string.pattern.name":
         "password must contain at least one {#name} character",
-      "string.min": "PasswordHashed must be at least 8 character long",
-      "string.max": "PasswordHashed cannot exceed 255 characters",
-      "any.required": "PasswordHashed is required",
+      "string.min": "Password must be at least 8 characters long",
+      "string.max": "Password cannot exceed 255 characters",
+      "any.required": "Password is required",
     }),
-  OfficerContactNo: Joi.number().min(8).max(8).required().messages({
-    "string.base": "ContactNo must be an integer",
-    "string.empty": "ContactNo cannot be empty",
-    "string.min": "ContactNo must be at least 8 digits long",
-    "string.max": "ContactNo cannot exceed 8 digits",
-    "any.required": "ContactNo is required",
-  }),
-  // Add validation for other fields if necessary (e.g., year, genre)
-  role: Joi.string()
+  // FIX 2: Fixed Joi number validation bounds for length checking
+  OfficerContactNo: Joi.string()
+    .pattern(/^[0-9]{8}$/)
+    .required()
+    .messages({
+      "string.base": "ContactNo must be a string of digits",
+      "string.empty": "ContactNo cannot be empty",
+      "string.pattern.base": "ContactNo must be exactly 8 digits long",
+      "any.required": "ContactNo is required",
+    }),
+  // FIX 3: Changed 'role' to 'OfficerRoles' to match your payload variables
+  OfficerRoles: Joi.string()
     .valid("Health", "Inspection", "Compliance", "Operations", "Enforcement")
-    .required(),
+    .required()
+    .messages({
+      "any.only": "Role is invalid",
+      "any.required": "Role is required",
+    }),
   OfficerStatus: Joi.string()
     .valid("Active", "Inactive", "Resigned", "Suspended")
-    .required(),
+    .required()
+    .messages({
+      "any.only": "Status is invalid",
+      "any.required": "Status is required",
+    }),
 });
 
 // Middleware to validate user data (for POST/PUT)
@@ -79,4 +95,5 @@ function validateuserId(req, res, next) {
 
 module.exports = {
   validateuser,
+  validateuserId,
 };
