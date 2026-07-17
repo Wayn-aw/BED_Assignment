@@ -9,6 +9,8 @@ const path = require("path");
 
 const ofcontroller = require("./controller/OfficerController");
 
+const ofmiddleware = require("./middleware/Officer");
+
 PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -18,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/NEAofficers", ofcontroller.getAllUsers);
+
+app.post("/createNEAOfficer", ofmiddleware.validateuser, ofcontroller.);
 
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);

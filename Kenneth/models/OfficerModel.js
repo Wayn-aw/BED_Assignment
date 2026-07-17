@@ -24,148 +24,109 @@ async function getAllUsers() {
   }
 }
 
-async function createUser(req, res) {
-  //same as createUser
-  const {
+async function createUser(dbData) {
+  let {
     OfficerName,
-    OfficerContactNo,
     OfficerUsername,
-    OfficerPassword,
+    OfficerPasswordHashed,
+    OfficerContactNo,
     OfficerRoles,
     OfficerStatus,
-  } = req.body;
+  } = dbData;
+  let connection;
 
   try {
-    // Validate user data
-    // ... your validation logic here ...
+    connection = await sql.connect(dbConfig);
 
-    if (
-      !OfficerName ||
-      OfficerName.match(/[!@#$%^&*(){}:"<>?/]/) ||
-      isNaN(OfficerName) ||
-      /\d/.test(OfficerName) // num checker
-    ) {
-      return res.status(400).json({
-        message:
-          "Username cannot include special characters, numbers or cannot be left blank",
-      });
+    // 1. Check if username already exists
+    const usernameCheckQuery = `
+      SELECT OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles
+      FROM NEA_Officer
+      WHERE OfficerUsername = @OfficerUsername
+    `;
+
+    const usernameRequest = connection.request();
+    usernameRequest.input("OfficerUsername", sql.VarChar, OfficerUsername);
+
+    const usernameResult = await usernameRequest.query(usernameCheckQuery);
+
+    if (usernameResult.recordset.length > 0) {
+      return { errorType: "EXISTS" };
     }
 
-    const onlyNumbers = /^[0-9]+$/;
-    if (!onlyNumbers.test(OfficerContactNo)) {
-      return res
-        .status(400)
-        .json({ message: "Phone number only accepts digits." });
+    // 2. Calculate the next custom OfficerID (e.g., 'OFF011')
+    const maxIdRequest = connection.request();
+    const maxIdResult = await maxIdRequest.query(`
+      SELECT MAX(OfficerID) AS maxId FROM NEA_Officer
+    `);
+
+    const maxIdStr = maxIdResult.recordset[0].maxId;
+    let nextOfficerID = "OFF001"; // Fallback if database is empty
+
+    if (maxIdStr) {
+      const currentNumber = parseInt(maxIdStr.substring(3), 10); // Extracts '010' -> 10
+      const nextNumber = currentNumber + 1; // 10 -> 11
+      nextOfficerID = "OFF" + String(nextNumber).padStart(3, "0"); // 11 -> 'OFF011'
     }
+    // 3. Insert Query (No SCOPE_IDENTITY() since we generate the ID manually)
+    const query = `
+      INSERT INTO NEA_Officer (
+        OfficerID, 
+        OfficerName, 
+        OfficerUsername, 
+        OfficerPasswordHashed, 
+        OfficerContactNo, 
+        OfficerRoles, 
+        OfficerStatus
+      ) 
+      VALUES (
+        @OfficerID, 
+        @OfficerName, 
+        @OfficerUsername, 
+        @OfficerPasswordHashed, 
+        @OfficerContactNo, 
+        @OfficerRoles, 
+        @OfficerStatus
+      );
+    `;
 
-    const username = OfficerUsername;
-    const password = OfficerPassword;
+    const request = connection.request();
 
-    if (
-      !OfficerUsername ||
-      OfficerUsername.trim() === "" ||
-      username.length < 3 ||
-      username.length > 15 ||
-      username.includes("!") ||
-      username.includes("?") ||
-      username.includes("[") ||
-      username.includes("]") ||
-      username.includes("/") ||
-      username.includes("{") ||
-      username.includes("}") ||
-      username.includes("(") ||
-      username.includes(")")
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Username too long or too short or is invalid" });
-    }
+    // Reassigning fallback
+    OfficerStatus = OfficerStatus || "Active";
 
-    if (
-      !OfficerPassword ||
-      OfficerPassword.trim() === "" ||
-      password.length < 8
-    ) {
-      return res.status(400).json({
-        message: "Password format is invalid or less than 8 characters.",
-      });
-    }
+    // Bind inputs
+    request.input("OfficerID", sql.Char(6), nextOfficerID);
+    request.input("OfficerName", sql.VarChar, OfficerName);
+    request.input("OfficerUsername", sql.VarChar, OfficerUsername);
+    request.input("OfficerPasswordHashed", sql.VarChar, OfficerPasswordHashed);
+    request.input("OfficerContactNo", sql.VarChar, OfficerContactNo);
+    request.input("OfficerRoles", sql.VarChar(11), OfficerRoles);
+    request.input("OfficerStatus", sql.VarChar(10), OfficerStatus);
 
-    if (
-      OfficerRoles !== "Health" &&
-      OfficerRoles !== "Inspection" &&
-      OfficerRoles !== "Compliance" &&
-      OfficerRoles !== "Operations" &&
-      OfficerRoles !== "Enforcement"
-    ) {
-      return res.status(400).json({ message: "Role is invalid" });
-    }
+    await request.query(query);
 
-    const statusList = ["Active", "Inactive", "Suspended", "Resigned"];
-    if (!statusList.includes(OfficerStatus)) {
-      return res.status(400).json({ message: "Status is invalid" });
-    }
+    return {
+      OfficerID: nextOfficerID,
+      OfficerName,
+      OfficerUsername,
+      OfficerContactNo,
+      OfficerRoles,
+      OfficerStatus,
+    };
 
-    // Hash password
-    const salt = await bcrypt.genSalt(12); //more secure 10 -> 12
-    const OfficerPasswordHashed = await bcrypt.hash(OfficerPassword, salt);
-
-    let connection;
-
-    try {
-      connection = await sql.connect(dbConfig);
-
-      const usernameCheckQuery = `
-        SELECT OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles
-        FROM NEA_Officer
-        WHERE OfficerUsername = @OfficerUsername
-      `;
-
-      const usernameRequest = connection.request();
-      usernameRequest.input("OfficerUsername", sql.VarChar, OfficerUsername);
-
-      const usernameResult = await usernameRequest.query(usernameCheckQuery);
-
-      if (usernameResult.recordset.length > 0) {
-        return res.status(400).json({
-          message: "Username already exists",
-        });
-      }
-
-      const query =
-        "INSERT INTO NEA_Officer (OfficerUsername, passwordHash, OfficerRoles) VALUES (@username, @passwordHash, @OfficerRoles); SELECT SCOPE_IDENTITY() AS user_id;";
-
-      const request = connection.request();
-
-      const OfficerStatus = "Active";
-
-      request.input("username", sql.VarChar, username);
-      request.input("passwordHash", sql.VarChar, OfficerPasswordHashed);
-      request.input("OfficerRoles", sql.VarChar(11), OfficerRoles);
-      request.input("OfficerStatus", sql.VarChar(10), OfficerStatus);
-
-      const result = await request.query(query);
-
-      const newUserId = result.recordset[0].user_id;
-
-      const newUser = await getUserById(newUserId);
-
-      return res.status(201).json(newUser);
-    } catch (error) {
-      console.error("Database error:", error);
-      throw error;
-    } finally {
-      if (connection) {
-        try {
-          await connection.close();
-        } catch (err) {
-          console.error("Error closing connection:", err);
-        }
+    return newUser;
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing connection:", err);
       }
     }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
