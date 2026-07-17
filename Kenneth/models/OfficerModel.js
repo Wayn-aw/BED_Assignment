@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const bcrypt = require("bcrypt");
 
 async function getAllUsers() {
   let connection;
@@ -42,22 +43,27 @@ async function createUser(req, res) {
       !OfficerName ||
       OfficerName.match(/[!@#$%^&*(){}:"<>?/]/) ||
       isNaN(OfficerName) ||
-      /\d/.test(officerName) // num checker
+      /\d/.test(OfficerName) // num checker
     ) {
-      res.status(400).json({
+      return res.status(400).json({
         message:
           "Username cannot include special characters, numbers or cannot be left blank",
       });
     }
+
     const onlyNumbers = /^[0-9]+$/;
     if (!onlyNumbers.test(OfficerContactNo)) {
       return res
         .status(400)
         .json({ message: "Phone number only accepts digits." });
     }
+
+    const username = OfficerUsername;
+    const password = OfficerPassword;
+
     if (
-      !req.body.OfficerUsername ||
-      req.body.OfficerUsername.trim() === "" ||
+      !OfficerUsername ||
+      OfficerUsername.trim() === "" ||
       username.length < 3 ||
       username.length > 15 ||
       username.includes("!") ||
@@ -76,8 +82,8 @@ async function createUser(req, res) {
     }
 
     if (
-      !OfficerPasswordHashed ||
-      req.body.OfficerPasswordHashed.trim() === "" ||
+      !OfficerPassword ||
+      OfficerPassword.trim() === "" ||
       password.length < 8
     ) {
       return res.status(400).json({
@@ -86,17 +92,17 @@ async function createUser(req, res) {
     }
 
     if (
-      req.body.OfficerRoles !== "Health" &&
-      req.body.OfficerRoles !== "Inspection" &&
-      req.body.OfficerRoles !== "Compliance" &&
-      req.body.OfficerRoles !== "Operations" &&
-      req.body.OfficerRoles !== "Enforcement"
+      OfficerRoles !== "Health" &&
+      OfficerRoles !== "Inspection" &&
+      OfficerRoles !== "Compliance" &&
+      OfficerRoles !== "Operations" &&
+      OfficerRoles !== "Enforcement"
     ) {
       return res.status(400).json({ message: "Role is invalid" });
     }
 
-    const status = ["Active", "Inactive", "Suspended", "Resigned"];
-    if (!status.includes(OfficerStatus)) {
+    const statusList = ["Active", "Inactive", "Suspended", "Resigned"];
+    if (!statusList.includes(OfficerStatus)) {
       return res.status(400).json({ message: "Status is invalid" });
     }
 
@@ -104,21 +110,19 @@ async function createUser(req, res) {
     const salt = await bcrypt.genSalt(12); //more secure 10 -> 12
     const OfficerPasswordHashed = await bcrypt.hash(OfficerPassword, salt);
 
-    const passwordHash = req.body.OfficerPassword;
-
     let connection;
 
     try {
       connection = await sql.connect(dbConfig);
-      const usernameInput = req.body.OfficerUsername;
-      const usernameCheckQuery = `
-    SELECT OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles
-    FROM NEA_Officer
-    WHERE OfficerUsername = @OfficerUsername
-`;
-      const usernameRequest = connection.request();
 
-      usernameRequest.input("OfficerUsername", sql.VarChar, usernameInput);
+      const usernameCheckQuery = `
+        SELECT OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles
+        FROM NEA_Officer
+        WHERE OfficerUsername = @OfficerUsername
+      `;
+
+      const usernameRequest = connection.request();
+      usernameRequest.input("OfficerUsername", sql.VarChar, OfficerUsername);
 
       const usernameResult = await usernameRequest.query(usernameCheckQuery);
 
@@ -127,37 +131,24 @@ async function createUser(req, res) {
           message: "Username already exists",
         });
       }
-      const status = "Active";
-      const roles = [
-        "Health",
-        "Inspection",
-        "Compliance",
-        "Operations",
-        "Enforcement",
-      ];
+
       const query =
         "INSERT INTO NEA_Officer (OfficerUsername, passwordHash, OfficerRoles) VALUES (@username, @passwordHash, @OfficerRoles); SELECT SCOPE_IDENTITY() AS user_id;";
 
       const request = connection.request();
 
-      request.input("username", sql.VarChar, username);
-      request.input("passwordHash", sql.VarChar, hashedPassword);
-      request.input("OfficerRoles", sql.VarChar(11), status);
-      request.input(
-        "OfficerStatus",
-        sql.VarChar(6),
-        roles.includes(OfficerRoles),
-      );
+      const OfficerStatus = "Active";
 
-      request.input;
+      request.input("username", sql.VarChar, username);
+      request.input("passwordHash", sql.VarChar, OfficerPasswordHashed);
+      request.input("OfficerRoles", sql.VarChar(11), OfficerRoles);
+      request.input("OfficerStatus", sql.VarChar(10), OfficerStatus);
 
       const result = await request.query(query);
 
-      const newUserId = result.recordset[0].id;
+      const newUserId = result.recordset[0].user_id;
 
       const newUser = await getUserById(newUserId);
-
-      // return created user (fixing your function name mismatch)
 
       return res.status(201).json(newUser);
     } catch (error) {
