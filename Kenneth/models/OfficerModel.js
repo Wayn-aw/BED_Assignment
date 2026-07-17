@@ -112,7 +112,7 @@ async function createUser(req, res) {
       connection = await sql.connect(dbConfig);
       const usernameInput = req.body.OfficerUsername;
       const usernameCheckQuery = `
-    SELECT OfficerName, OfficerContactNo, OfficerUsername,
+    SELECT OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles
     FROM NEA_Officer
     WHERE OfficerUsername = @OfficerUsername
 `;
@@ -127,7 +127,14 @@ async function createUser(req, res) {
           message: "Username already exists",
         });
       }
-      const role = "Health";
+      const status = "Active";
+      const roles = [
+        "Health",
+        "Inspection",
+        "Compliance",
+        "Operations",
+        "Enforcement",
+      ];
       const query =
         "INSERT INTO NEA_Officer (OfficerUsername, passwordHash, OfficerRoles) VALUES (@username, @passwordHash, @OfficerRoles); SELECT SCOPE_IDENTITY() AS user_id;";
 
@@ -135,7 +142,14 @@ async function createUser(req, res) {
 
       request.input("username", sql.VarChar, username);
       request.input("passwordHash", sql.VarChar, hashedPassword);
-      request.input("role", sql.VarChar(9), role);
+      request.input("OfficerRoles", sql.VarChar(11), status);
+      request.input(
+        "OfficerStatus",
+        sql.VarChar(6),
+        roles.includes(OfficerRoles),
+      );
+
+      request.input;
 
       const result = await request.query(query);
 
@@ -166,4 +180,5 @@ async function createUser(req, res) {
 
 module.exports = {
   getAllUsers,
+  createUser,
 };
