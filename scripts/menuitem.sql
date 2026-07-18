@@ -1,0 +1,28 @@
+USE [bed_db]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MenuItem](
+	[StallID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemCode] [varchar](20) NULL,
+	[ItemDesc] [varchar](120) NULL,
+	[ItemPrice] [decimal](6, 2) NULL,
+	[ItemCategory] [varchar](30) NULL,
+ CONSTRAINT [PK_MenuItem] PRIMARY KEY CLUSTERED 
+(
+	[StallID] ASC,
+	[ItemCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[MenuItem]  WITH CHECK ADD  CONSTRAINT [FK_MenuItem_Stall] FOREIGN KEY([StallID])
+REFERENCES [dbo].[FoodStall] ([StallID])
+GO
+ALTER TABLE [dbo].[MenuItem] CHECK CONSTRAINT [FK_MenuItem_Stall]
+GO
+ALTER TABLE [dbo].[MenuItem]  WITH CHECK ADD  CONSTRAINT [CK_MenuItem_Price] CHECK  (([ItemPrice]>(0)))
+GO
+ALTER TABLE [dbo].[MenuItem] CHECK CONSTRAINT [CK_MenuItem_Price]
+GO

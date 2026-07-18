@@ -1,0 +1,24 @@
+USE [bed_db]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[HawkerCentre](
+	[HawkerCentreID] [int] IDENTITY(1,1) NOT NULL,
+	[HCName] [varchar](120) NULL,
+	[HCAddress] [varchar](200) NULL,
+	[OperatorID] [int] NULL,
+ CONSTRAINT [PK_HawkerCentre] PRIMARY KEY CLUSTERED 
+(
+	[HawkerCentreID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[HawkerCentre]  WITH CHECK ADD  CONSTRAINT [FK_HawkerCentre_Operator] FOREIGN KEY([OperatorID])
+REFERENCES [dbo].[Operator] ([OperatorID])
+GO
+
+ALTER TABLE [dbo].[HawkerCentre] CHECK CONSTRAINT [FK_HawkerCentre_Operator]
+GO

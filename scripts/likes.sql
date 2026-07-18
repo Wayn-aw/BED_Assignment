@@ -1,0 +1,28 @@
+USE [bed_db]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Likes](
+	[CustomerID] [int] IDENTITY(1,1) NOT NULL,
+	[StallID] [int] NULL,
+	[ItemCode] [varchar](20) NULL,
+ CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
+(
+	[CustomerID] ASC,
+	[StallID] ASC,
+	[ItemCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Likes]  WITH CHECK ADD  CONSTRAINT [FK_Likes_Customer] FOREIGN KEY([CustomerID])
+REFERENCES [dbo].[Customer] ([CustomerID])
+GO
+ALTER TABLE [dbo].[Likes] CHECK CONSTRAINT [FK_Likes_Customer]
+GO
+ALTER TABLE [dbo].[Likes]  WITH CHECK ADD  CONSTRAINT [FK_Likes_MenuItem] FOREIGN KEY([StallID], [ItemCode])
+REFERENCES [dbo].[MenuItem] ([StallID], [ItemCode])
+GO
+ALTER TABLE [dbo].[Likes] CHECK CONSTRAINT [FK_Likes_MenuItem]
+GO
