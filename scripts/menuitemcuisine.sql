@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MenuItemCuisine](
-	[CuisineID] [int] IDENTITY(1,1) NOT NULL,
+	[CuisineID] [int] NOT NULL,
 	[StallID] [int] NULL,
 	[ItemCode] [varchar](20) NULL,
  CONSTRAINT [PK_MenuItemCuisine] PRIMARY KEY CLUSTERED 

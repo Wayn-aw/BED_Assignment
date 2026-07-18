@@ -6,8 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[StallOwner](
 	[OwnerID] [int] IDENTITY(1,1) NOT NULL,
-	[OwnerName] [varchar](50) NULL,
-	[OwnerNRIC] [char](9) NULL,
+	[OwnerName] [varchar](MAX) NULL,
+	[OwnerNRIC] [char](10) NULL,
 	[OwnerContactNo] [varchar](15) NULL,
  CONSTRAINT [PK_StallOwner] PRIMARY KEY CLUSTERED 
 (

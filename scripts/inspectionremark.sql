@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[InspectionRemark](
 	[InspectionID] [int] IDENTITY(1,1) NOT NULL,
-	[InspectionRemark] [varchar](255) NULL,
+	[InspectionRemark] [varchar](MAX) NULL,
  CONSTRAINT [PK_InspectionRemark] PRIMARY KEY CLUSTERED 
 (
 	[InspectionID] ASC

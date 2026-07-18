@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Operator](
 	[OperatorID] [int] IDENTITY(1,1) NOT NULL,
-	[OperatorName] [varchar](50) NULL,
+	[OperatorName] [varchar](MAX) NULL,
 	[ContactPerson] [varchar](50) NULL,
 PRIMARY KEY CLUSTERED 
 (

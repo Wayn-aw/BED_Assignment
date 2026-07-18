@@ -5,8 +5,8 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Likes](
-	[CustomerID] [int] IDENTITY(1,1) NOT NULL,
-	[StallID] [int] NULL,
+	[CustomerID] [int] NOT NULL,
+	[StallID] [int] NOT NULL,
 	[ItemCode] [varchar](20) NULL,
  CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
 (

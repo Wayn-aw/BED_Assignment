@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Promotion](
 	[PromoID] [int] IDENTITY(1,1) NOT NULL,
-	[PromoDesc] [varchar](200) NULL,
+	[PromoDesc] [varchar](MAX) NULL,
 	[PromoStartDate] [datetime] NULL,
 	[PromoEndDate] [datetime] NULL,
 	[StallID] [int] NULL,

@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[NEA_Officer](
 	[OfficerID] [int] IDENTITY(1,1) NOT NULL,
-	[OfficerName] [varchar](50) NULL,
+	[OfficerName] [varchar](MAX) NULL,
 	[OfficerContactNo] [varchar](15) NULL,
  CONSTRAINT [PK_NEA_Officer] PRIMARY KEY CLUSTERED 
 (

@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[RentalAgreement](
 	[AgrStartDate] [datetime] NULL,
 	[AgrEndDate] [datetime] NULL,
 	[AgrTermCondition] [varchar](max) NULL,
-	[RentalPrice] [smallmoney] NULL,
+	[RentalPrice] [int] NULL,
 	[OwnerID] [int] NULL,
 	[StallID] [int] NULL,
  CONSTRAINT [PK_RentalAgreement] PRIMARY KEY CLUSTERED 

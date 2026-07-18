@@ -6,10 +6,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Customer](
 	[CustomerID] [int] IDENTITY(1,1) NOT NULL,
-	[CustNRIC] [char](9) NULL,
-	[CustName] [varchar](100) NULL,
+	[CustNRIC] [char](10) NULL,
+	[CustName] [varchar](MAX) NULL,
 	[CustContactNo] [varchar](15) NULL,
-	[CustEmail] [varchar](150) NULL,
+	[CustEmail] [varchar](MAX) NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[CustomerID] ASC

@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[FoodStall](
 	[StallID] [int] IDENTITY(1,1) NOT NULL,
 	[StallUnitNo] [varchar](10) NULL,
 	[StallName] [varchar](100) NULL,
-	[StallDesc] [varchar](255) NULL,
+	[StallDesc] [varchar](MAX) NULL,
 	[HawkerCentreID] [int] NULL,
  CONSTRAINT [PK_FoodStall] PRIMARY KEY CLUSTERED 
 (

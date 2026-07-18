@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[OrderItem](
 	[StallID] [int] NULL,
 	[ItemCode] [varchar](20) NULL,
 	[Quantity] [int] NULL,
-	[UnitPrice] [smallmoney] NULL,
+	[UnitPrice] [int] NULL,
  CONSTRAINT [PK_OrderItem] PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC,

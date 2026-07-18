@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Complaint](
-	[FbkID] [int] IDENTITY(1,1)  NOT NULL,
+	[FbkID] [int] IDENTITY(1,1) NOT NULL,
 	[Category] [varchar](50) NULL,
  CONSTRAINT [PK_Complaint] PRIMARY KEY CLUSTERED 
 (
