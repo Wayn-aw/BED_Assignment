@@ -1,0 +1,13 @@
+DB_USER=sa1
+
+DB_PASSWORD=YOUR_SQL_PASSWORD
+
+DB_DATABASE=bed_db
+
+DB_DATABASE=HawkerHubDB
+
+DB_USER=booksapi_user
+
+DB_PASSWORD=123
+
+DB_DATABASE=FinalAssigment
