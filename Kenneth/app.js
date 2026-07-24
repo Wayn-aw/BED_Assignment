@@ -30,6 +30,12 @@ app.put(
   ofmiddleware.validateOfficerStatus,
   ofcontroller.updateUsersStatus,
 );
+
+app.delete(
+  "/NEAofficers/:id",
+  ofmiddleware.validateusersId,
+  ofcontroller.deleteOfficerById,
+);
 PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);

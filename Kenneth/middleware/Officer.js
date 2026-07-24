@@ -93,6 +93,22 @@ function validateuserId(req, res, next) {
   next();
 }
 
+function validateusersId(req, res, next) {
+  const id = req.params.id;
+  const regex = /^OFF\d{3}$/;
+
+  if (!regex.test(id)) {
+    // If not valid, send a 400 response
+    return res.status(400).json({
+      error:
+        "Invalid user ID. ID must follow this format starting with 'OFF' followed by last 3 digits",
+    });
+  }
+
+  // If validation succeeds, pass control to the next middleware/route handler
+  next();
+}
+
 function validateOfficerStatus(req, res, next) {
   // Parse the ID from request parameters
   const status = req.body.OfficerStatus;
@@ -124,4 +140,5 @@ module.exports = {
   validateuser,
   validateuserId,
   validateOfficerStatus,
+  validateusersId,
 };

@@ -1,3 +1,4 @@
+const { use } = require("react");
 const { user } = require("../dbConfig");
 
 const User = require("../models/OfficerModel");
@@ -18,7 +19,7 @@ async function getAllUsers(req, res) {
     }
   } catch (error) {
     console.error("Controller error:", error);
-    res.status(500).json({ error: "Error retrieving books" });
+    res.status(500).json({ error: "Error retrieving Officers" });
   }
 }
 
@@ -179,9 +180,39 @@ async function updateUsersStatus(req, res) {
   } catch (error) {
     console.error("Controller error:", error);
     return res.status(500).json({
-      error: "Error updating Books",
+      error: "Error updating Officer",
       message: error.message,
     });
+  }
+}
+
+async function deleteOfficerById(req, res) {
+  try {
+    const id = req.params.id;
+
+    //console.log("DELETE ID:", id);
+    const user = await User.deleteOfficerById(id);
+    //console.log(Officer);
+    if (!user || user === null) {
+      res.statusCode = 400; //old format for vanilla JS (withour Express())
+      return res.end("Officer not found");
+      //return res.status(404).json({ error: "Officer not found" });
+    }
+    //console.log("Delete result:", user);
+    // const deleted = await User.deleteOfficerById(id);
+    // if (!deleted || deleted === null) {
+    //   res.statusCode = 400;
+    //   return res.end("Deleted failed");
+    // }
+    return res.json({
+      message: "Officer deleted successfully",
+      id: id,
+    });
+  } catch (error) {
+    //console.error("Controller error:", error);
+    res
+      .status(500)
+      .json({ error: "Error retrieving officer", message: error.message });
   }
 }
 
@@ -189,4 +220,5 @@ module.exports = {
   getAllUsers,
   createUser,
   updateUsersStatus,
+  deleteOfficerById,
 };
