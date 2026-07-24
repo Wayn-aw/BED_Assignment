@@ -93,7 +93,35 @@ function validateuserId(req, res, next) {
   next();
 }
 
+function validateOfficerStatus(req, res, next) {
+  // Parse the ID from request parameters
+  const status = req.body.OfficerStatus;
+
+  // Check if the parsed ID is a valid positive number
+  if (!status || status === null) {
+    // If not valid, send a 400 response
+    return res.status(400).json({
+      error: "Invalid officer status. status must not be blank",
+    });
+  }
+
+  if (
+    status !== "Active" &&
+    status !== "Suspended" &&
+    status !== "Inactive" &&
+    status != "Resigned"
+  ) {
+    return res.status(400).json({
+      message:
+        "Availability must be set to either Active  Suspended,  Inactive or Resigned",
+    });
+  }
+  // If validation succeeds, pass control to the next middleware/route handler
+  next();
+}
+
 module.exports = {
   validateuser,
   validateuserId,
+  validateOfficerStatus,
 };

@@ -146,7 +146,7 @@ async function createUser(req, res) {
 
 async function updateUsersStatus(req, res) {
   try {
-    const username = req.params.OfficerUsername;
+    const { username } = req.params;
 
     if (
       req.body.OfficerStatus !== "Active" &&
@@ -160,10 +160,11 @@ async function updateUsersStatus(req, res) {
     }
 
     const updatedStatus = {
+      OfficerUsername: req.body.OfficerUsername,
       OfficerStatus: req.body.OfficerStatus,
     };
 
-    const modifyStatusAvailability = await Book.updateBookAvailability(
+    const modifyStatusAvailability = await User.updateUsersStatus(
       username,
       updatedStatus,
     );

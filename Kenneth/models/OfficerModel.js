@@ -1,6 +1,7 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const bcrypt = require("bcrypt");
+const { use } = require("react");
 
 async function getAllUsers() {
   let connection;
@@ -131,7 +132,36 @@ async function createUser(dbData) {
   }
 }
 
+async function updateUsersStatus(username, OfficerStatus) {
+  let connection;
+
+  try {
+    connection = await sql.connect(dbConfig);
+
+    const query =
+      "UPDATE NEA_Officer SET OfficerStatus = @OfficerStatus WHERE OfficerUsername = @OfficerUsername; " +
+      "SELECT * FROM NEA_Officer WHERE OfficerUsername = @OfficerUsername";
+
+    const request = connection.request();
+
+    request.input("OfficerUsername", username);
+    request.input("OfficerStatus", OfficerStatus.OfficerStatus);
+
+    const result = await request.query(query);
+
+    return result.recordset[0];
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
+  updateUsersStatus,
 };
