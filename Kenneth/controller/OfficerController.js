@@ -144,7 +144,48 @@ async function createUser(req, res) {
   }
 }
 
+async function updateUsersStatus(req, res) {
+  try {
+    const username = req.params.OfficerUsername;
+
+    if (
+      req.body.OfficerStatus !== "Active" &&
+      req.body.OfficerStatus !== "Inactive" &&
+      req.body.OfficerStatus !== "Suspended" &&
+      req.body.OfficerStatus !== "Resigned"
+    ) {
+      return res.status(400).json({
+        message: "Officer status is not valid.",
+      });
+    }
+
+    const updatedStatus = {
+      OfficerStatus: req.body.OfficerStatus,
+    };
+
+    const modifyStatusAvailability = await Book.updateBookAvailability(
+      username,
+      updatedStatus,
+    );
+
+    if (!modifyStatusAvailability || modifyStatusAvailability === null) {
+      return res.status(404).json({
+        error: "Officer not found",
+      });
+    }
+
+    return res.status(200).json(modifyStatusAvailability);
+  } catch (error) {
+    console.error("Controller error:", error);
+    return res.status(500).json({
+      error: "Error updating Books",
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
+  updateUsersStatus,
 };
