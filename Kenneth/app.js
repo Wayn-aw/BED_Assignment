@@ -36,6 +36,12 @@ app.delete(
   ofmiddleware.validateusersId,
   ofcontroller.deleteOfficerById,
 );
+
+app.get(
+  "/NEAofficers/:id",
+  ofmiddleware.validateusersId,
+  ofcontroller.getOfficerbyID,
+);
 PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);

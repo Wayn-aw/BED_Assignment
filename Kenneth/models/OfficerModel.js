@@ -198,9 +198,39 @@ async function deleteOfficerById(id) {
   }
 }
 
+async function getOfficerById(id) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query =
+      "SELECT OfficerID, OfficerName, OfficerContactNo, OfficerUsername, OfficerRoles, OfficerStatus FROM NEA_Officer WHERE OfficerID = @OfficerID";
+    const request = connection.request();
+    request.input("OfficerID", id);
+    const result = await request.query(query);
+
+    if (result.recordset.length === 0) {
+      return null; // Officer not found
+    }
+
+    return result.recordset[0];
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing connection:", err);
+      }
+    }
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUsersStatus,
   deleteOfficerById,
+  getOfficerById,
 };

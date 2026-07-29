@@ -8,15 +8,16 @@ const bcrypt = require("bcrypt");
 async function getAllUsers(req, res) {
   try {
     const users = await User.getAllUsers();
-    res.json(users);
+    // res.json(users);
 
     if (!users || users === null) {
       res.status(404).json({ error: "User not found" });
     }
 
-    if (user.length === 0) {
+    if (users.length === 0) {
       return res.status(204).json({ message: "No users displayed" });
     }
+    res.json(users);
   } catch (error) {
     console.error("Controller error:", error);
     res.status(500).json({ error: "Error retrieving Officers" });
@@ -216,9 +217,28 @@ async function deleteOfficerById(req, res) {
   }
 }
 
+async function getOfficerbyID(req, res) {
+  try {
+    const id = req.params.id;
+    const officer = await User.getOfficerById(id);
+    //console.log(student);
+    if (!officer || officer === null) {
+      return res.status(404).json({ error: "Officer not found" });
+    }
+
+    res.json(officer);
+  } catch (error) {
+    console.error("Controller error:", error);
+    res
+      .status(500)
+      .json({ error: "Error retrieving officer", message: error.message });
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUsersStatus,
   deleteOfficerById,
+  getOfficerbyID,
 };
