@@ -1,62 +1,259 @@
-<h1
-  style="
-    color: blueviolet;
-    background-color: aliceblue;
-    align-content: flex-start;
-    align-self: first baseline;
-    padding-top: 1%;
-    text-align: left;
-  "
->
-  <i>Welcome back!</i>
-</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEA Officer Management System</title>
 
-<h3 style="color: orangered">Show all Offiers</h3>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: white;
+        color: black;
+        margin: 0;
+        padding: 20px;
+        transition: 0.3s;
+      }
 
-<p><b>This is the information you need: </b></p>
+      header {
+        background-color: aliceblue;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 8px solid blueviolet;
+      }
 
-<div id="officerList"></div>
+      h1 {
+        color: blueviolet;
+        margin: 0;
+      }
 
-<h5>
-  Create new
-  <i
-    style="
-      font-weight: bold;
-      font-family:
-        &quot;Franklin Gothic Medium&quot;, &quot;Arial Narrow&quot;, Arial,
-        sans-serif;
-      color: orangered;
-    "
-    >officer</i
-  >:
-</h5>
+      h2 {
+        color: orangered;
+      }
 
-<section>
-  <div class="container">
-    <div id="inputTextofficer"></div>
-  </div>
-</section>
+      .container {
+        margin-top: 20px;
+      }
 
-<aside>
-  <div class="Order-History" id="OrderHist">
-    <input id="name" placeholder="Name" />
-    <div>&nbsp;</div>
-    <input id="user-id" placeholder="User ID" />
-    <div>&nbsp;</div>
-    <input id="contact-number" placeholder="Contact Number" />
-    <div>&nbsp;</div>
-    <input id="username" placeholder="username" />
-    <div>&nbsp;</div>
-    <input id="password" placeholder="password" />
-    <div>&nbsp;</div>
-    <input id="role" placeholder="role" />
-    <div>&nbsp;</div>
-    <input id="create-status" placeholder="Status" />
-  </div>
-</aside>
+      .card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+      }
 
-<div>&nbsp;</div>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
 
-<button style="border-radius: 10%; border: 3px solid peru">Submit</button>
+      th {
+        background-color: orangered;
+        color: white;
+        padding: 12px;
+      }
 
-<script src="script.js"></script>
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f7f7f7;
+      }
+
+      input {
+        width: 90%;
+        padding: 10px;
+        margin: 6px;
+        border-radius: 6px;
+        border: 1px solid grey;
+      }
+
+      button {
+        padding: 10px 18px;
+        margin: 10px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .submit-btn {
+        background-color: peru;
+        color: white;
+      }
+
+      .dark-btn {
+        background-color: black;
+        color: white;
+      }
+
+      .green-btn {
+        background-color: red;
+        color: green;
+      }
+
+      .button-area {
+        text-align: center;
+      }
+      .soft-delete-btn {
+        background-color: darkorange;
+        color: white;
+
+        padding: 8px 15px;
+
+        border-radius: 8px;
+
+        border: none;
+
+        cursor: pointer;
+      }
+
+      .soft-delete-btn:hover {
+        background-color: orange;
+      }
+      .active-btn {
+        background-color: green;
+
+        color: white;
+
+        padding: 8px 15px;
+
+        border-radius: 8px;
+
+        border: none;
+
+        cursor: pointer;
+      }
+
+      .active-btn:hover {
+        background-color: darkgreen;
+      }
+
+      .status-select {
+        padding: 8px;
+
+        border-radius: 8px;
+
+        border: 2px solid #555;
+      }
+
+      .update-status-btn {
+        background-color: royalblue;
+
+        color: white;
+
+        padding: 8px 15px;
+
+        border-radius: 8px;
+
+        border: none;
+
+        cursor: pointer;
+      }
+
+      .update-status-btn:hover {
+        background-color: darkblue;
+      }
+
+      /* Dark mode */
+      .dark-mode {
+        background-color: black;
+        color: white;
+      }
+
+      .dark-mode .card,
+      .dark-mode header {
+        background-color: #222;
+        color: white;
+      }
+
+      /* Green mode */
+      .green-mode {
+        background-color: red;
+        color: green;
+      }
+
+      .green-mode .card,
+      .green-mode header {
+        background-color: #ffcccc;
+        color: green;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <i>Welcome back!</i>
+      </h1>
+
+      <p>National Environment Agency Officer Management System</p>
+    </header>
+
+    <div class="button-area">
+      <button class="dark-btn" id="darkModeBtn">Dark Mode</button>
+
+      <button class="green-btn" id="greenModeBtn">Green Mode</button>
+    </div>
+
+    <div class="card">
+      <h2>Show all Officers</h2>
+
+      <p>
+        <b>Officer information retrieved from database:</b>
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Contact</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="officerList">
+          <!-- Data from database will appear here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Create New Officer</h2>
+
+      <section>
+        <div class="container">
+          <input id="name" placeholder="Officer Name" />
+
+          <input id="user-id" placeholder="User ID" />
+
+          <input id="contact-number" placeholder="Contact Number" />
+
+          <input id="username" placeholder="Username" />
+
+          <input id="password" placeholder="Password" type="password" />
+
+          <input id="role" placeholder="Role" />
+
+          <input id="create-status" placeholder="Status" />
+        </div>
+      </section>
+
+      <div class="button-area">
+        <button class="submit-btn">Submit</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
