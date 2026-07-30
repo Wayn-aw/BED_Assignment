@@ -1,10 +1,14 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json");
 
+const auth = require("./controller/authentication");
+
 const sql = require("mssql");
-require("dotenv").config();
+// require("dotenv").config();
 const path = require("path");
 
 app.use(express.json());
@@ -42,6 +46,8 @@ app.get(
   ofmiddleware.validateusersId,
   ofcontroller.getOfficerbyID,
 );
+
+app.post("/login", auth.login);
 PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running at PORT ${PORT}`);

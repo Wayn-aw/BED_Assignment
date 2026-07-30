@@ -235,10 +235,27 @@ async function getOfficerbyID(req, res) {
   }
 }
 
+async function getOfficerbyUsername(username) {
+  const sql = require("mssql");
+  const dbConfig = require("../dbConfig");
+
+  const pool = await sql.connect(dbConfig);
+
+  const result = await pool.request().input("username", sql.VarChar, username)
+    .query(`
+      SELECT *
+      FROM NEA_Officer
+      WHERE OfficerUsername = @username
+    `);
+
+  return result.recordset[0];
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUsersStatus,
   deleteOfficerById,
   getOfficerbyID,
+  getOfficerbyUsername,
 };

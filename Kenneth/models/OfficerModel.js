@@ -227,10 +227,130 @@ async function getOfficerById(id) {
   }
 }
 
+async function registerUser(req, res) {
+  //same as createUser
+  const { username, password, role, status } = req.body;
+
+  try {
+    // Validate user data
+    // ... your validation logic here ...
+    if (
+      !req.body.username ||
+      req.body.username.trim() === "" ||
+      username.length < 1 ||
+      username.length > 255 ||
+      username.includes("!") ||
+      username.includes("?") ||
+      username.includes("[") ||
+      username.includes("]") ||
+      username.includes("/") ||
+      username.includes("{") ||
+      username.includes("}") ||
+      username.includes("(") ||
+      username.includes(")")
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Username too long or too short or is invalid" });
+    }
+
+    if (!password || req.body.password.trim() === "" || password.length < 8) {
+      return res.status(400).json({
+        message: "Password format is invalid or less than 8 characters.",
+      });
+    }
+
+    if (
+      req.body.role !== "Health" &&
+      req.body.role !== "Inspection" &&
+      req.body.role !== "Compliance" &&
+      req.body.role !== "Enforcement" &&
+      req.body.role !== "Operations"
+    ) {
+      return res.status(400).json({ message: "Role is invalid" });
+    }
+
+    if (
+      req.body.status !== "Active" &&
+      req.body.status !== "Suspended" &&
+      req.body.status !== "Inactive" &&
+      req.body.status !== "Resigned"
+    ) {
+      return res.status.json({ message: "Status is invalid" });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(12); //more secure 10-> 12
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const passwordHash = req.body.password;
+
+    let connection;
+
+    try {
+      connection = await sql.connect(dbConfig);
+      const usernameInput = req.body.username;
+      const usernameCheckQuery = `
+    SELECT OfficerUsername
+    FROM NEA_Officer
+    WHERE OfficerUsername = @OfficerUsername
+`;
+      const usernameRequest = connection.request();
+
+      usernameRequest.input("OfficerUsername", sql.VarChar, usernameInput);
+
+      const usernameResult = await usernameRequest.query(usernameCheckQuery);
+
+      if (usernameResult.recordset.length > 0) {
+        return res.status(400).json({
+          message: "Username already exists",
+        });
+      }
+
+      const query =
+        "INSERT INTO  NEA_Officer (OfficerID, OfficerUsername, OfficerPasswordHashed, OfficerRoles, ) VALUES (@OfficerID, @OfficerUsername, @OfficerPasswordHashed, @OfficerRoles, @OfficerStatus); ";
+
+      const request = connection.request();
+
+      request.input("OfficerID", sql.VarChar, OfficerID);
+      request.input("OfficerUsername", sql.VarChar, OfficerUsername);
+      request.input("OfficerPasswordHashed", sql.VarChar, hashedPassword);
+      request.input("role", sql.VarChar(11), OfficerRoles);
+      request.input("status", sql.VarChar(10), OfficerStatus); //tightly coupled
+      const result = await request.query(query);
+
+      const newUserId = result.recordset[0].OfficerID;
+
+      const newUser = await getUserById(newUserId);
+
+      // return created user (fixing your function name mismatch)
+
+      return res.status(201).json(newUser);
+    } catch (error) {
+      console.error("Database error:", error);
+      throw error;
+    } finally {
+      if (connection) {
+        try {
+          await connection.close();
+        } catch (err) {
+          console.error("Error closing connection:", err);
+        }
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: err.message }); // err.message is application error not system error (checked with ai upon this)
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUsersStatus,
   deleteOfficerById,
   getOfficerById,
+  registerUser,
 };

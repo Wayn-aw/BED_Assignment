@@ -9,3 +9,8 @@ module.exports = {
     connectionTimeout: 60000, // Connection timeout in milliseconds
   },
 };
+// console.log({
+//   DB_USER: process.env.DB_USER,
+//   DB_SERVER: process.env.DB_SERVER,
+//   DB_DATABASE: process.env.DB_DATABASE,
+// });
