@@ -1,0 +1,12 @@
+node_modules/
+.env
+npm-debug.log
+*.log
+.DS_Store
+
+# Demo videos are ~380MB - submit these via POLITEMall, not GitHub.
+# GitHub rejects individual files over 100MB.
+video_demo/
+
+# Jest coverage output
+coverage/
