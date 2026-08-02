@@ -1,0 +1,432 @@
+{
+	"info": {
+		"name": "HawkerHub API",
+		"description": "Checkpoint testing collection - one folder per team member.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "stallId",
+			"value": "1"
+		},
+		{
+			"key": "itemId",
+			"value": "1"
+		},
+		{
+			"key": "orderId",
+			"value": "1"
+		}
+	],
+	"item": [
+		{
+			"name": "Kenneth - Account Management & Payments",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{baseUrl}}/users/register",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test Patron\",\n  \"email\": \"testpatron@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patron\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{baseUrl}}/users/login",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jonathan@example.com\",\n  \"password\": \"Password123!\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/users/profile"
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/users/profile",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jonathan Tan\",\n  \"phone\": \"91234567\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Create Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/payments",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": {{orderId}},\n  \"paymentMethod\": \"PayNow\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Payment by Order",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/payments/{{orderId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Kyra - Browse, Feedback & Complaints",
+			"item": [
+				{
+					"name": "Get All Stalls",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/stalls"
+					}
+				},
+				{
+					"name": "Get Stall by ID (with menu)",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/stalls/{{stallId}}"
+					}
+				},
+				{
+					"name": "Submit Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/feedback",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"rating\": 5,\n  \"comments\": \"Great food!\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Feedback for Stall",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/feedback/stall/{{stallId}}"
+					}
+				},
+				{
+					"name": "Lodge Complaint",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/complaints",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"description\": \"Long queue and no clear numbering system.\"\n}"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Wayne - Vendor Menu & Checkout",
+			"item": [
+				{
+					"name": "Create Menu Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/menu",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"itemName\": \"Char Siew Rice\",\n  \"price\": 5.5,\n  \"category\": \"Main\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Menu Item",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/menu/{{itemId}}"
+					}
+				},
+				{
+					"name": "Update Menu Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/menu/{{itemId}}",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 5.8\n}"
+						}
+					}
+				},
+				{
+					"name": "Checkout (Create Order)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{baseUrl}}/orders",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"items\": [ { \"itemId\": {{itemId}}, \"quantity\": 2 } ]\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Order",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/orders/{{orderId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Jeremiah - Inspections & Promotions",
+			"item": [
+				{
+					"name": "Create Inspection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/inspections",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"score\": 88,\n  \"remarks\": \"Minor improvements needed on grease trap.\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Inspection History",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/inspections/stall/{{stallId}}"
+					}
+				},
+				{
+					"name": "Create Promotion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/promotions",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"title\": \"Weekday Lunch Deal\",\n  \"discountPercentage\": 10,\n  \"startDate\": \"2026-07-20\",\n  \"endDate\": \"2026-12-31\"\n}"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Yongsheng - Rentals, Likes & Analytics",
+			"item": [
+				{
+					"name": "Create Rental Agreement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/rentals",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stallId\": {{stallId}},\n  \"startDate\": \"2026-08-01\",\n  \"endDate\": \"2027-07-31\",\n  \"monthlyRent\": 1400\n}"
+						}
+					}
+				},
+				{
+					"name": "Get Rental History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/rentals/stall/{{stallId}}"
+					}
+				},
+				{
+					"name": "Toggle Like",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/likes/{{itemId}}"
+					}
+				},
+				{
+					"name": "Sales Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{baseUrl}}/analytics/sales/{{stallId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Yongsheng - NEA Open Data (Third-Party API)",
+			"item": [
+				{
+					"name": "List NEA Hawker Centres (default)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/centres/nea"
+					}
+				},
+				{
+					"name": "List NEA Hawker Centres (paginated + search)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/centres/nea?limit=5&offset=0&search=Bedok"
+					}
+				},
+				{
+					"name": "Invalid limit (validation error, 400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/centres/nea?limit=999"
+					}
+				}
+			]
+		}
+	]
+}

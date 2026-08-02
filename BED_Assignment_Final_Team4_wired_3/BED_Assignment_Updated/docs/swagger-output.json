@@ -1,0 +1,2586 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HawkerHub API",
+    "version": "1.0.0",
+    "description": "RESTful API for the HawkerHub Singapore Hawker Centre Management System. Protected endpoints require a JWT: call POST /api/v1/users/login, copy the token from the response, then click Authorize above and paste it."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Account management, login, profiles (Kenneth)"
+    },
+    {
+      "name": "Payments",
+      "description": "Order payment records (Kenneth)"
+    },
+    {
+      "name": "Stalls",
+      "description": "Public browsing of stalls and menus (Kyra)"
+    },
+    {
+      "name": "Feedback",
+      "description": "Patron ratings and comments (Kyra)"
+    },
+    {
+      "name": "Complaints",
+      "description": "Formal complaints against stalls (Kyra)"
+    },
+    {
+      "name": "Menu",
+      "description": "Vendor menu item CRUD (Wayne)"
+    },
+    {
+      "name": "Orders",
+      "description": "Cart checkout and order status (Wayne)"
+    },
+    {
+      "name": "Inspections",
+      "description": "NEA inspections and hygiene grades (Jeremiah)"
+    },
+    {
+      "name": "Promotions",
+      "description": "Stall promotions (Jeremiah)"
+    },
+    {
+      "name": "Rentals",
+      "description": "Rental agreement tracking (Yongsheng)"
+    },
+    {
+      "name": "Likes",
+      "description": "Likes on individual menu items (Yongsheng)"
+    },
+    {
+      "name": "Analytics",
+      "description": "Sales and performance analytics (Yongsheng)"
+    },
+    {
+      "name": "Centres",
+      "description": "NEA hawker centre open data via data.gov.sg (third-party API)"
+    },
+    {
+      "name": "Cuisines",
+      "description": "Cuisine lookup for menu item categorisation (Wayne)"
+    }
+  ],
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Register a new account",
+        "description": "Creates a Patron, Vendor, NEAOfficer, Operator or Admin account. The password is hashed with bcrypt before it is stored.",
+        "responses": {
+          "201": {
+            "description": "Account created successfully."
+          },
+          "400": {
+            "description": "Missing field, invalid role, or password shorter than 6 characters."
+          },
+          "409": {
+            "description": "An account with this email already exists."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Log in and receive a JWT",
+        "description": "Returns a signed JWT. Send it on protected routes as the header: Authorization: Bearer <token>",
+        "responses": {
+          "200": {
+            "description": "Login successful, token returned."
+          },
+          "400": {
+            "description": "email or password missing."
+          },
+          "401": {
+            "description": "Invalid email or password."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/profile": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get the logged-in users own profile",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile returned. Never includes PasswordHash."
+          },
+          "401": {
+            "description": "No token provided."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update the logged-in users own profile",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile updated."
+          },
+          "400": {
+            "description": "name is required."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Kenneth Lim"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "91234567"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get any user by ID (Admin / Operator only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "UserID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User returned."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller is not an Admin or Operator."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Deactivate an account (Admin only, soft delete)",
+        "description": "Sets IsActive = 0 rather than deleting the row, so past orders and audit history stay intact.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "UserID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account deactivated."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller is not an Admin."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create a payment for an order",
+        "description": "Simulated payment gateway (bank interfaces are handled by another team per the case brief). paymentMethod must be Cash, NETS, PayNow or CreditCard.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment successful."
+          },
+          "400": {
+            "description": "Missing field, or paymentMethod is not one of the allowed values."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Order not found."
+          },
+          "409": {
+            "description": "This order has already been paid for."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "paymentMethod"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "paymentMethod": {
+                    "type": "string",
+                    "enum": [
+                      "Cash",
+                      "NETS",
+                      "PayNow",
+                      "CreditCard"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/{orderId}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get the payment status for an order",
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "OrderID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment returned."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "No payment found for this order."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/{id}": {
+      "put": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Update a payment status, e.g. retry a failed payment",
+        "description": "status must be one of Pending, Success, Failed.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "PaymentID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment status updated."
+          },
+          "400": {
+            "description": "status is not one of the allowed values."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Payment not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Pending",
+                      "Success",
+                      "Failed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Delete a payment record (Operator / Admin only)",
+        "description": "Restricted more tightly than the other Payments routes on purpose - reversing a payment is a bigger deal than creating or viewing one. Confirm this matches what the team actually wants before demo night.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "PaymentID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Payment not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/stalls/": {
+      "get": {
+        "tags": [
+          "Stalls"
+        ],
+        "summary": "List all food stalls (public)",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Stalls returned."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Stalls"
+        ],
+        "summary": "Admit a new stall into a hawker centre (Operator / Admin only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Stall created."
+          },
+          "400": {
+            "description": "Missing field, or ownerId is not a Vendor."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Hawker centre not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "centreId",
+                  "ownerId",
+                  "stallName"
+                ],
+                "properties": {
+                  "centreId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "ownerId": {
+                    "type": "integer",
+                    "example": 3,
+                    "description": "must be a UserID with the Vendor role"
+                  },
+                  "stallName": {
+                    "type": "string",
+                    "example": "Second Stall by Ah Hock"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stalls/{id}": {
+      "get": {
+        "tags": [
+          "Stalls"
+        ],
+        "summary": "Get a stall and its full menu (public)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stall with its menu array returned."
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Stalls"
+        ],
+        "summary": "Edit a stall's display details (owning Vendor, or Operator/Admin)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stall updated."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller neither owns this stall nor is Operator/Admin."
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stallName": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Stalls"
+        ],
+        "summary": "Retire a stall (Operator / Admin only)",
+        "description": "Fails with 409 if the stall still has menu items, orders, promotions, feedback, complaints, inspections or rental agreements pointing at it - clear those first.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stall deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Stall not found."
+          },
+          "409": {
+            "description": "Stall is still referenced by other records."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/feedback/": {
+      "post": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Submit feedback for a stall (Patron only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Feedback submitted."
+          },
+          "400": {
+            "description": "Missing stallId/rating, or rating outside 1-5."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/stall/{id}": {
+      "get": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Get all feedback for a stall (public)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback list returned."
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/{id}": {
+      "put": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Edit your own feedback (Patron only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "FeedbackID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback updated."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this feedback."
+          },
+          "404": {
+            "description": "Feedback not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "comments": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Delete feedback (owner Patron or Admin)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "FeedbackID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this feedback and is not an Admin."
+          },
+          "404": {
+            "description": "Feedback not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/complaints/": {
+      "post": {
+        "tags": [
+          "Complaints"
+        ],
+        "summary": "Lodge a complaint against a stall (Patron only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Complaint submitted."
+          },
+          "400": {
+            "description": "Missing field, or description shorter than 10 characters."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "stallId",
+                  "description"
+                ],
+                "properties": {
+                  "stallId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "The stall floor was very greasy and unswept."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/complaints/mine": {
+      "get": {
+        "tags": [
+          "Complaints"
+        ],
+        "summary": "Get the logged-in Patron's own complaint history",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complaints returned."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/complaints/{id}": {
+      "put": {
+        "tags": [
+          "Complaints"
+        ],
+        "summary": "Update a complaint status (Operator / Admin only)",
+        "description": "status must be one of Open, Investigating, Resolved, Dismissed.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ComplaintID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complaint status updated."
+          },
+          "400": {
+            "description": "status is not one of the allowed values."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Complaint not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Open",
+                      "Investigating",
+                      "Resolved",
+                      "Dismissed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/menu/": {
+      "post": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Create a menu item (Vendor only, own stall)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Menu item created."
+          },
+          "400": {
+            "description": "Missing field, negative price, or invalid category."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this stall."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuItemRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/menu/{id}": {
+      "get": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Get a menu item by ID (public)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ItemID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menu item returned."
+          },
+          "404": {
+            "description": "Menu item not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Update a menu item (Vendor only, own stall)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ItemID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menu item updated."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this item."
+          },
+          "404": {
+            "description": "Menu item not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "itemName": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "Main",
+                      "Drink",
+                      "Dessert",
+                      "Side"
+                    ]
+                  },
+                  "isAvailable": {
+                    "type": "boolean"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Delete a menu item (Vendor only, own stall)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ItemID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menu item deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this item."
+          },
+          "404": {
+            "description": "Menu item not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cuisines/": {
+      "get": {
+        "tags": [
+          "Cuisines"
+        ],
+        "summary": "List all cuisines (public)",
+        "description": "Use these CuisineIDs in the cuisineIds array when creating a menu item.",
+        "responses": {
+          "200": {
+            "description": "Cuisines returned."
+          }
+        }
+      }
+    },
+    "/api/v1/orders/": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Checkout the cart (guest or logged-in Patron)",
+        "description": "If a valid JWT is supplied the order is linked to that Patron; otherwise it is a guest order (patronId is null).",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Order placed successfully."
+          },
+          "400": {
+            "description": "Missing stallId/items, or an item has an invalid itemId/quantity."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/mine": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get the logged-in Patron's own order history",
+        "description": "Must be registered above the /:id route below - otherwise Express matches \"mine\" as an :id value first.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders returned, most recent first."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get an order and its line items",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "OrderID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order (with items array) returned."
+          },
+          "404": {
+            "description": "Order not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update an order's status (Vendor only)",
+        "description": "status must be one of Pending, Preparing, Ready, Collected, Cancelled.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "OrderID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order status updated."
+          },
+          "400": {
+            "description": "status is not one of the allowed values."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Order not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Pending",
+                      "Preparing",
+                      "Ready",
+                      "Collected",
+                      "Cancelled"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inspections/": {
+      "post": {
+        "tags": [
+          "Inspections"
+        ],
+        "summary": "Log a hygiene inspection (NEA Officer only)",
+        "description": "Automatically derives and inserts a hygiene grade (A/B/C/D) from the score.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Inspection recorded and hygiene grade returned."
+          },
+          "400": {
+            "description": "Missing field, or score outside 0-100."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "stallId",
+                  "score"
+                ],
+                "properties": {
+                  "stallId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "score": {
+                    "type": "number",
+                    "example": 88,
+                    "description": "0-100"
+                  },
+                  "remarks": {
+                    "type": "string",
+                    "example": "Clean workstation, minor grease buildup near sink."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inspections/stall/{id}": {
+      "get": {
+        "tags": [
+          "Inspections"
+        ],
+        "summary": "Get the inspection and hygiene grade history for a stall (public)",
+        "description": "Public for transparency, so patrons and vendors can see historical hygiene grades.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspection history returned."
+          }
+        }
+      }
+    },
+    "/api/v1/inspections/{id}": {
+      "put": {
+        "tags": [
+          "Inspections"
+        ],
+        "summary": "Amend an inspection you recorded (NEA Officer only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "InspectionID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspection updated."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller did not record this inspection."
+          },
+          "404": {
+            "description": "Inspection not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number"
+                  },
+                  "remarks": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Inspections"
+        ],
+        "summary": "Delete an inspection you recorded (NEA Officer only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "InspectionID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspection record deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller did not record this inspection."
+          },
+          "404": {
+            "description": "Inspection not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/promotions/": {
+      "post": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Create a promotion (Vendor only, own stall)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Promotion created."
+          },
+          "400": {
+            "description": "Missing field, discountPercentage outside 1-100, or endDate not after startDate."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this stall."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "stallId",
+                  "title",
+                  "discountPercentage",
+                  "startDate",
+                  "endDate"
+                ],
+                "properties": {
+                  "stallId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "National Day Special"
+                  },
+                  "discountPercentage": {
+                    "type": "number",
+                    "example": 20,
+                    "description": "1-100"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-08-09"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-08-16"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/promotions/stall/{id}": {
+      "get": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Get all promotions for a stall (public)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotions returned."
+          }
+        }
+      }
+    },
+    "/api/v1/promotions/{id}": {
+      "delete": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Delete a promotion (Vendor only, own stall)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "PromotionID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotion deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this promotion."
+          },
+          "404": {
+            "description": "Promotion not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Edit a promotion (Vendor only, own stall)",
+        "description": "Any field left out keeps its current value.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "PromotionID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotion updated."
+          },
+          "400": {
+            "description": "discountPercentage outside 1-100, or endDate not after startDate."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller does not own this promotion."
+          },
+          "404": {
+            "description": "Promotion not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "discountPercentage": {
+                    "type": "number"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rentals/": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "summary": "Create a rental agreement (Operator / Admin only)",
+        "description": "Stalls can have multiple historical agreements, e.g. from renewals. endDate must not be before startDate.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Rental agreement created."
+          },
+          "400": {
+            "description": "Missing field, endDate before startDate, or negative monthlyRent."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Stall not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "stallId",
+                  "startDate",
+                  "endDate",
+                  "monthlyRent"
+                ],
+                "properties": {
+                  "stallId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-01-01"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-12-31"
+                  },
+                  "monthlyRent": {
+                    "type": "number",
+                    "example": 1200.5
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rentals/stall/{id}": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "summary": "Get the full rental history for a stall",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rental agreements returned (may be an empty array)."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/rentals/{id}": {
+      "put": {
+        "tags": [
+          "Rentals"
+        ],
+        "summary": "Update a rental agreement (Operator / Admin only)",
+        "description": "Any field left out keeps its current value. status must be Active, Expired or Terminated.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "RentalAgreementID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rental agreement updated."
+          },
+          "400": {
+            "description": "status is not one of the allowed values."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Rental agreement not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "monthlyRent": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Active",
+                      "Expired",
+                      "Terminated"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Rentals"
+        ],
+        "summary": "Delete a rental agreement (Operator / Admin only)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "RentalAgreementID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rental agreement deleted."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Rental agreement not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/likes/{itemId}": {
+      "put": {
+        "tags": [
+          "Likes"
+        ],
+        "summary": "Toggle a like on a menu item (Patron only)",
+        "description": "Acts as create-or-delete: if the caller has not liked this item yet it is liked, otherwise the existing like is removed. Returns the new liked state and the updated total count.",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "MenuItemID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like toggled; returns liked (boolean) and likeCount."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Menu item not found."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Likes"
+        ],
+        "summary": "Get the like count for a menu item (public)",
+        "description": "",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "MenuItemID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like count returned."
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/sales/{stallId}": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get sales analytics for a stall (Operator / Vendor / Admin only)",
+        "description": "Returns total revenue, total order count, the most popular menu items, and peak ordering hours for the given stall.",
+        "parameters": [
+          {
+            "name": "stallId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "StallID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analytics returned: totalRevenue, totalOrders, popularItems, peakHours."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Caller is not an Operator, Vendor or Admin."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/centres/nea": {
+      "get": {
+        "tags": [
+          "Centres"
+        ],
+        "summary": "List NEA-registered hawker centres (live from data.gov.sg)",
+        "description": "Proxies the data.gov.sg Datastore Search API from the back-end. Responses are cached in memory for one hour to stay within the upstream rate limit; the cached flag in the response tells you which path was taken.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Rows to return (1-100).",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "default": {
+                  "type": "number",
+                  "example": 20
+                }
+              }
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Rows to skip, for pagination.",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "default": {
+                  "type": "number",
+                  "example": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Free-text filter, e.g. Bedok.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Centres returned."
+          },
+          "400": {
+            "description": "Invalid limit, offset or search value."
+          },
+          "429": {
+            "description": "Upstream rate limit reached."
+          },
+          "502": {
+            "description": "Upstream returned an unexpected response."
+          },
+          "503": {
+            "description": "Upstream unreachable or timed out."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Operation completed successfully."
+          },
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "A human-readable explanation of what went wrong."
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Kenneth Lim"
+          },
+          "email": {
+            "type": "string",
+            "example": "kenneth@np.edu.sg"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!"
+          },
+          "role": {
+            "type": "string",
+            "example": "Patron"
+          },
+          "phone": {
+            "type": "string",
+            "example": "91234567"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "kenneth@np.edu.sg"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "MenuItemRequest": {
+        "type": "object",
+        "properties": {
+          "stallId": {
+            "type": "number",
+            "example": 1
+          },
+          "itemName": {
+            "type": "string",
+            "example": "Chicken Rice"
+          },
+          "description": {
+            "type": "string",
+            "example": "Steamed chicken with fragrant rice"
+          },
+          "price": {
+            "type": "number",
+            "example": 4.5
+          },
+          "category": {
+            "type": "string",
+            "example": "Main"
+          },
+          "cuisineIds": {
+            "type": "array",
+            "example": [
+              1,
+              2
+            ],
+            "items": {
+              "type": "number"
+            }
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/chicken-rice.jpg"
+          }
+        },
+        "required": [
+          "stallId",
+          "itemName",
+          "price"
+        ]
+      },
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "stallId": {
+            "type": "number",
+            "example": 1
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "quantity": {
+                  "type": "number",
+                  "example": 2
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "stallId",
+          "items"
+        ]
+      },
+      "FeedbackRequest": {
+        "type": "object",
+        "properties": {
+          "stallId": {
+            "type": "number",
+            "example": 1
+          },
+          "rating": {
+            "type": "number",
+            "example": 5
+          },
+          "comments": {
+            "type": "string",
+            "example": "Very tasty and the stall was clean."
+          }
+        },
+        "required": [
+          "stallId",
+          "rating"
+        ]
+      }
+    }
+  }
+}

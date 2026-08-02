@@ -1,0 +1,2948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HawkerHub — Order from Singapore's Best</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #0D2B1F;
+      --green-800: #1B4332;
+      --green-700: #2D6A4F;
+      --green-100: #D8F3DC;
+      --amber:     #D97706;
+      --amber-lt:  #FEF3C7;
+      --amber-dark:#B45309;
+      --star:      #F59E0B;
+      --bg:        #FFFBF0;
+      --bg-card:   #FFFFFF;
+      --text-main: #1C1917;
+      --text-muted:#6B7280;
+      --text-light:#9CA3AF;
+      --border:    #E5E7EB;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      --shadow-lg: 0 20px 48px rgba(0,0,0,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 120px;
+    }
+
+    /* ── Navbar ───────────────────────────────────────────────── */
+    .navbar {
+      background: var(--green-800);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--amber);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.3px;
+    }
+
+    .brand-name span { color: var(--amber); }
+
+    .navbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .btn-cart {
+      background: var(--amber);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: .875rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .18s, transform .12s;
+      font-family: inherit;
+    }
+
+    .btn-cart:hover { background: var(--amber-dark); transform: translateY(-1px); }
+
+    .cart-count {
+      background: #fff;
+      color: var(--amber-dark);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--green-900) 0%, var(--green-800) 55%, var(--green-700) 100%);
+      color: #fff;
+      padding: 52px 24px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Noto Serif', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-sub {
+      color: rgba(255,255,255,.7);
+      font-size: 1rem;
+      max-width: 440px;
+      margin: 0 auto 28px;
+    }
+
+    .hero-search {
+      display: flex;
+      max-width: 440px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 50px;
+      padding: 5px 5px 5px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    }
+
+    .hero-search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: .95rem;
+      color: var(--text-main);
+      background: transparent;
+    }
+
+    .hero-search input::placeholder { color: var(--text-light); }
+
+    .hero-search button {
+      background: var(--amber);
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      padding: 9px 20px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: .875rem;
+      cursor: pointer;
+      transition: background .18s;
+    }
+
+    .hero-search button:hover { background: var(--amber-dark); }
+
+    /* ── Section layout ───────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -.3px;
+    }
+
+    .section-meta {
+      font-size: .82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Stall tabs / filter ──────────────────────────────────── */
+    .filter-bar {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      position: sticky;
+      top: 62px;
+      z-index: 90;
+    }
+
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-tab {
+      padding: 14px 20px;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2.5px solid transparent;
+      transition: color .18s, border-color .18s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: inherit;
+    }
+
+    .filter-tab.active {
+      color: var(--green-800);
+      border-bottom-color: var(--green-800);
+    }
+
+    .filter-tab:hover:not(.active) { color: var(--text-main); }
+
+    /* ── Stall Section ───────────────────────────────────────── */
+    .stalls-wrapper { padding-top: 36px; }
+
+    .stall-section { margin-bottom: 52px; }
+
+    .stall-card-header {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .stall-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .stall-info { flex: 1; }
+
+    .stall-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -.2px;
+    }
+
+    .stall-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .stall-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--amber-dark);
+    }
+
+    .stall-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: .73rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .stall-wait {
+      font-size: .8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-open {
+      background: #D1FAE5;
+      color: #065F46;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 50px;
+    }
+
+    /* ── Menu Grid ───────────────────────────────────────────── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .menu-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .2s, transform .2s;
+    }
+
+    .menu-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .menu-img-wrap {
+      position: relative;
+      height: 170px;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .menu-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .3s;
+    }
+
+    .menu-card:hover .menu-img-wrap img { transform: scale(1.04); }
+
+    .menu-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--amber);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .menu-body {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .menu-name {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+
+    .menu-desc {
+      font-size: .82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+
+    .menu-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--green-800);
+    }
+
+    .menu-price sup {
+      font-size: .65rem;
+      font-weight: 700;
+      vertical-align: super;
+      color: var(--green-700);
+    }
+
+    .btn-add {
+      background: var(--green-800);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: .83rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .18s, transform .12s;
+    }
+
+    .btn-add:hover { background: var(--green-700); transform: scale(1.04); }
+    .btn-add:active { transform: scale(.97); }
+
+    /* ── Divider ─────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0 44px;
+    }
+
+    /* ── Feedback Section ────────────────────────────────────── */
+    .feedback-section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 32px 28px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .feedback-section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      margin-bottom: 4px;
+    }
+
+    .feedback-section-sub {
+      font-size: .875rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 22px; }
+
+    .form-label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    /* Stall selector */
+    .stall-select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--text-main);
+      background: #fff;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      cursor: pointer;
+      transition: border-color .18s;
+    }
+
+    .stall-select:focus {
+      outline: none;
+      border-color: var(--green-800);
+      box-shadow: 0 0 0 3px rgba(27,67,50,.12);
+    }
+
+    /* Star Rating */
+    .stars-wrapper {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      font-size: 2rem;
+      color: #D1D5DB;
+      transition: color .15s, transform .12s;
+      line-height: 1;
+    }
+
+    .star-btn.active { color: var(--star); }
+    .star-btn:hover { transform: scale(1.15); }
+
+    .star-label {
+      font-size: .85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-left: 8px;
+      min-width: 80px;
+    }
+
+    /* Textarea */
+    .form-textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--text-main);
+      resize: vertical;
+      line-height: 1.6;
+      transition: border-color .18s;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--green-800);
+      box-shadow: 0 0 0 3px rgba(27,67,50,.12);
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: .75rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* Photo upload hint */
+    .upload-hint {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .18s, background .18s;
+    }
+
+    .upload-hint:hover {
+      border-color: var(--green-700);
+      background: rgba(27,67,50,.03);
+    }
+
+    .upload-hint-icon { font-size: 1.6rem; margin-bottom: 6px; }
+
+    .upload-hint-text {
+      font-size: .82rem;
+      color: var(--text-muted);
+    }
+
+    .upload-hint-text strong { color: var(--green-800); }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      background: var(--green-800);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .18s, transform .12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover { background: var(--green-700); }
+    .btn-submit:active { transform: scale(.98); }
+
+    /* Success message */
+    .feedback-success {
+      display: none;
+      text-align: center;
+      padding: 36px 20px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--green-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+    }
+
+    .success-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .success-sub {
+      font-size: .9rem;
+      color: var(--text-muted);
+      max-width: 300px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    .btn-again {
+      background: none;
+      border: 1.5px solid var(--green-800);
+      color: var(--green-800);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .18s, color .18s;
+    }
+
+    .btn-again:hover {
+      background: var(--green-800);
+      color: #fff;
+    }
+
+    /* ── Toast ───────────────────────────────────────────────── */
+    .toast-container {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--green-900);
+      color: #fff;
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-size: .9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn .3s cubic-bezier(.34, 1.56, .64, 1) forwards;
+      pointer-events: auto;
+      white-space: nowrap;
+    }
+
+    .toast.fade-out { animation: toastOut .3s ease forwards; }
+
+    .toast-icon {
+      background: var(--amber);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      flex-shrink: 0;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px) scale(.92); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(8px) scale(.95); }
+    }
+
+    /* ── Cart Drawer (chit style) ────────────────────────────── */
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 200;
+    }
+
+    .cart-overlay.open { display: block; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: min(380px, 95vw);
+      background: var(--bg);
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .cart-drawer.open { transform: translateX(0); }
+
+    .cart-header {
+      background: var(--green-800);
+      color: #fff;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-header-title { font-weight: 800; font-size: 1rem; }
+    .cart-header-sub { font-size: .75rem; color: rgba(255,255,255,.65); margin-top: 2px; }
+
+    .btn-close-cart {
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      transition: background .18s;
+    }
+
+    .btn-close-cart:hover { background: rgba(255,255,255,.25); }
+
+    /* Chit styling */
+    .cart-chit {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .chit-header {
+      text-align: center;
+      padding: 12px 0 16px;
+      border-bottom: 1px dashed #ccc;
+      margin-bottom: 12px;
+    }
+
+    .chit-title {
+      font-family: 'Noto Serif', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-800);
+    }
+
+    .chit-sub { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item-qty {
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: .78rem;
+      font-weight: 800;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cart-item-name {
+      flex: 1;
+      font-size: .88rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .cart-item-stall {
+      font-size: .72rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .cart-item-price {
+      font-size: .88rem;
+      font-weight: 800;
+      color: var(--green-800);
+      flex-shrink: 0;
+    }
+
+    .btn-remove-item {
+      background: none;
+      border: none;
+      color: #D1D5DB;
+      cursor: pointer;
+      font-size: .9rem;
+      padding: 2px;
+      transition: color .15s;
+    }
+
+    .btn-remove-item:hover { color: #EF4444; }
+
+    .cart-empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+
+    .cart-empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .cart-empty-text { font-size: .9rem; line-height: 1.5; }
+
+    .cart-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0 14px;
+      border-bottom: 2px dashed #ccc;
+      margin-bottom: 14px;
+    }
+
+    .cart-total-label { font-size: .88rem; color: var(--text-muted); font-weight: 600; }
+    .cart-total-amount { font-size: 1.3rem; font-weight: 800; color: var(--green-800); }
+
+    .btn-checkout {
+      width: 100%;
+      background: var(--amber);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .18s;
+    }
+
+    .btn-checkout:hover { background: var(--amber-dark); }
+
+    /* ── Nav tabs (section switcher) ─────────────────────────── */
+    .page-nav {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      display: inline-flex;
+      gap: 4px;
+      margin: 32px auto 0;
+      display: flex;
+      max-width: 400px;
+    }
+
+    .page-nav-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: .875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .18s, color .18s;
+      background: transparent;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .page-nav-btn.active {
+      background: var(--green-800);
+      color: #fff;
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--green-900);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 24px;
+      font-size: .8rem;
+      margin-top: 60px;
+    }
+
+    .site-footer strong { color: rgba(255,255,255,.8); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 36px 16px 36px; }
+      .hero h1 { font-size: 1.65rem; }
+      .filter-tab { padding: 12px 14px; font-size: .82rem; }
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .menu-img-wrap { height: 130px; }
+      .stall-card-header { padding: 14px 16px; }
+      .feedback-section { padding: 22px 16px; }
+      .container { padding: 0 14px; }
+    }
+
+    @media (max-width: 400px) {
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .toast { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+    /* ══════════════════════════════════════════════
+       LIVE BACKEND SECTION (Rentals, Likes, Analytics, Centres)
+       Owner: Yongsheng — real fetch() calls to the Express API,
+       styled with the same tokens as the rest of the page.
+       ══════════════════════════════════════════════ */
+    .live-intro {
+      max-width: 680px;
+      margin: 0 auto 28px;
+      text-align: center;
+    }
+
+    .live-intro-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -.3px; margin-bottom: 6px; }
+    .live-intro-sub { font-size: .875rem; color: var(--text-muted); line-height: 1.6; }
+
+    .auth-bar {
+      background: var(--green-900);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      max-width: 680px;
+      margin: 0 auto 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .auth-bar.signed-in { background: var(--green-700); }
+
+    .auth-bar-status {
+      font-size: .82rem;
+      font-weight: 600;
+      flex: 1 1 220px;
+    }
+
+    .auth-bar-status small { display: block; font-weight: 400; opacity: .75; margin-top: 2px; }
+
+    .auth-bar input, .auth-bar select {
+      font-family: inherit;
+      font-size: .82rem;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: none;
+    }
+
+    .live-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .live-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 26px 24px;
+    }
+
+    .live-card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-card-sub {
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .live-endpoint-tag {
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-size: .68rem;
+      font-weight: 700;
+      background: var(--amber-lt);
+      color: var(--amber-dark);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .live-owner-tag {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      background: var(--green-100);
+      color: var(--green-800);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--text-main);
+      background: #fff;
+      transition: border-color .18s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green-800);
+      box-shadow: 0 0 0 3px rgba(27,67,50,.12);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: #fff;
+      color: var(--green-800);
+      border: 1.5px solid var(--green-800);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-size: .9rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .18s;
+    }
+
+    .btn-secondary:hover { background: var(--green-100); }
+
+    .live-result {
+      margin-top: 16px;
+      border-top: 1px dashed var(--border);
+      padding-top: 14px;
+      font-size: .85rem;
+      display: none;
+    }
+
+    .live-result.visible { display: block; }
+
+    .live-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      font-size: .82rem;
+    }
+
+    .live-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-mini {
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: .72rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-mini.edit { background: var(--amber-lt); color: var(--amber-dark); }
+    .btn-mini.del { background: #FEE2E2; color: #B91C1C; }
+
+    .live-empty { color: var(--text-light); font-size: .82rem; text-align: center; padding: 8px 0; }
+    .live-error { color: #B91C1C; font-size: .82rem; background: #FEF2F2; border: 1px solid #FECACA; padding: 10px 12px; border-radius: var(--radius-sm); }
+
+    .pill { display: inline-block; font-size: .68rem; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+    .pill.ok { background: var(--green-100); color: var(--green-800); }
+    .pill.cached { background: var(--amber-lt); color: var(--amber-dark); }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navbar ─────────────────────────────────── -->
+  <nav class="navbar">
+    <a class="navbar-brand" href="#">
+      <div class="brand-icon">🍜</div>
+      <span class="brand-name">Hawker<span>Hub</span></span>
+    </a>
+    <div class="navbar-right">
+      <button class="btn-cart" onclick="openCart()">
+        🛒 Your Order
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-eyebrow">📍 Tanjong Pagar Hawker Centre</div>
+    <h1>Singapore's Flavours,<br /><em>Delivered Fresh.</em></h1>
+    <p class="hero-sub">Order from your favourite stalls, skip the queue, collect when it's ready.</p>
+    <div class="hero-search">
+      <input type="text" placeholder="Search chicken rice, laksa, char kway teow…" id="searchInput" />
+      <button onclick="filterMenu()">Search</button>
+    </div>
+  </section>
+
+  <!-- ── Page Nav ────────────────────────────────── -->
+  <div class="container">
+    <div class="page-nav">
+      <button class="page-nav-btn active" onclick="switchPage('menu', this)">🍽️ Browse Menu</button>
+      <button class="page-nav-btn" onclick="switchPage('feedback', this)">⭐ Leave Feedback</button>
+      <button class="page-nav-btn" onclick="switchPage('live', this)">🔌 Live Backend</button>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ──────────────────────────────── -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-tab active" onclick="filterTab('all', this)">All Stalls</button>
+    <button class="filter-tab" onclick="filterTab('chicken-rice-stall', this)">Ah Lian Chicken Rice</button>
+    <button class="filter-tab" onclick="filterTab('noodle-bar', this)">Uncle Tian Noodle Bar</button>
+    <button class="filter-tab" onclick="filterTab('bbq-corner', this)">Malay BBQ Corner</button>
+  </div>
+
+  <!-- ── Menu Section ───────────────────────────── -->
+  <div class="page-section active" id="menuSection">
+    <div class="container">
+      <div class="stalls-wrapper" id="stallsWrapper">
+        <!-- JS renders here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feedback Section ───────────────────────── -->
+  <div class="page-section" id="feedbackSection">
+    <div class="container" style="padding-top: 36px; padding-bottom: 36px;">
+      <div class="feedback-section">
+        <!-- Form -->
+        <div id="feedbackForm">
+          <div class="section-header" style="margin-bottom: 6px;">
+            <div>
+              <div class="feedback-section-title">Share Your Experience</div>
+              <div class="feedback-section-sub">Help other patrons discover the best stalls.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Which stall are you rating?</label>
+            <select class="stall-select" id="feedbackStall">
+              <option value="">Select a stall…</option>
+              <option value="Ah Lian Chicken Rice">Ah Lian Chicken Rice</option>
+              <option value="Uncle Tian Noodle Bar">Uncle Tian Noodle Bar</option>
+              <option value="Malay BBQ Corner">Malay BBQ Corner</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your rating</label>
+            <div class="stars-wrapper">
+              <button class="star-btn" data-val="1" onclick="setRating(1)" aria-label="1 star">★</button>
+              <button class="star-btn" data-val="2" onclick="setRating(2)" aria-label="2 stars">★</button>
+              <button class="star-btn" data-val="3" onclick="setRating(3)" aria-label="3 stars">★</button>
+              <button class="star-btn" data-val="4" onclick="setRating(4)" aria-label="4 stars">★</button>
+              <button class="star-btn" data-val="5" onclick="setRating(5)" aria-label="5 stars">★</button>
+              <span class="star-label" id="starLabel">Tap to rate</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your comments</label>
+            <textarea
+              class="form-textarea"
+              id="feedbackText"
+              maxlength="400"
+              placeholder="How was the food quality, service, and overall experience?"
+              oninput="updateCharCount()"
+            ></textarea>
+            <div class="char-count"><span id="charCount">0</span> / 400</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Add a photo <span style="font-weight:400; color:var(--text-muted)">(optional)</span></label>
+            <div class="upload-hint" onclick="showToast('📸 Photo upload will be enabled in the live build!')">
+              <div class="upload-hint-icon">📷</div>
+              <div class="upload-hint-text"><strong>Click to upload</strong> or drag and drop<br/>JPG, PNG up to 5 MB</div>
+            </div>
+          </div>
+
+          <button class="btn-submit" onclick="submitFeedback()">
+            ✉️ Submit Feedback
+          </button>
+        </div>
+
+        <!-- Success -->
+        <div class="feedback-success" id="feedbackSuccess">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Thank you!</div>
+          <p class="success-sub">Your feedback has been recorded. It helps our hawker stalls serve you better.</p>
+          <button class="btn-again" onclick="resetFeedback()">Leave Another Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Live Backend Section (real API calls) ──── -->
+  <!-- Owner: Yongsheng — Rentals, Likes, Analytics & NEA Open Data (third-party API) -->
+  <div class="page-section" id="liveSection">
+    <div class="container" style="padding-top: 36px; padding-bottom: 36px;">
+
+      <div class="live-intro">
+        <div class="live-intro-title">🔌 Live Backend — All Team Features</div>
+        <div class="live-intro-sub">
+          Unlike the menu/cart above (static demo data), everything on this tab makes
+          real <code>fetch()</code> calls to the Express + MSSQL API, grouped by
+          feature owner below. Sign in with a demo account first for anything
+          that needs auth.
+        </div>
+      </div>
+
+      <!-- Sign in bar: needed for Rentals + Analytics (staff-only), not for Likes/Centres -->
+      <div class="auth-bar" id="authBar">
+        <div class="auth-bar-status" id="authStatus">Not signed in — needed for Rentals &amp; Analytics only</div>
+        <select id="demoAccountSelect" onchange="fillDemoAccount()">
+          <option value="">Quick-fill demo account…</option>
+          <option value="susan.lim@operator.sg">Operator — susan.lim@operator.sg</option>
+          <option value="ahhock@stall.sg">Vendor — ahhock@stall.sg</option>
+          <option value="meiling@stall.sg">Vendor — meiling@stall.sg</option>
+          <option value="jonathan@example.com">Patron — jonathan@example.com</option>
+          <option value="officer.tan@nea.gov.sg">NEA Officer — officer.tan@nea.gov.sg</option>
+        </select>
+        <input type="email" id="authEmail" placeholder="email" style="width:150px" />
+        <input type="password" id="authPassword" placeholder="Password123!" style="width:120px" />
+        <button class="btn-mini edit" onclick="doLogin()">Sign In</button>
+        <button class="btn-mini del" onclick="doLogout()">Sign Out</button>
+      </div>
+
+      <div class="live-grid">
+
+        <!-- RENTALS -->
+        <div class="live-card">
+          <div class="live-card-title">🏠 Rental Agreements <span class="live-endpoint-tag">/api/v1/rentals</span><span class="live-owner-tag">Yongsheng</span></div>
+          <div class="live-card-sub">Full CRUD. Create requires an Operator/Admin login above.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="rentalStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="number" step="0.01" id="rentalMonthlyRent" placeholder="Monthly rent" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="date" id="rentalStartDate" />
+            <input class="form-input" type="date" id="rentalEndDate" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createRental()">+ Create Agreement</button>
+          <button class="btn-secondary" onclick="loadRentals()">🔎 View History for Stall ID above</button>
+
+          <div class="live-result" id="rentalResult"></div>
+        </div>
+
+        <!-- LIKES -->
+        <div class="live-card">
+          <div class="live-card-title">❤️ Item Likes <span class="live-endpoint-tag">/api/v1/likes/:itemId</span><span class="live-owner-tag">Yongsheng</span></div>
+          <div class="live-card-sub">Toggling a like requires a Patron login above; checking the count is public.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="likeItemId" placeholder="Menu Item ID (e.g. 1)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <button class="btn-submit" onclick="toggleLike()">❤️ Toggle Like</button>
+            <button class="btn-secondary" onclick="checkLikeCount()">🔎 Check Count</button>
+          </div>
+
+          <div class="live-result" id="likeResult"></div>
+        </div>
+
+        <!-- ANALYTICS -->
+        <div class="live-card">
+          <div class="live-card-title">📊 Sales Analytics <span class="live-endpoint-tag">/api/v1/analytics/sales/:stallId</span><span class="live-owner-tag">Yongsheng</span></div>
+          <div class="live-card-sub">Operator, Vendor, or Admin login required above.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="analyticsStallId" placeholder="Stall ID (e.g. 1)" />
+          </div>
+          <button class="btn-submit" onclick="loadAnalytics()">📈 Get Sales Analytics</button>
+
+          <div class="live-result" id="analyticsResult"></div>
+        </div>
+
+        <!-- CENTRES (third-party API) -->
+        <div class="live-card">
+          <div class="live-card-title">🇸🇬 NEA Hawker Centres <span class="live-endpoint-tag">/api/v1/centres/nea</span><span class="live-owner-tag">Yongsheng</span></div>
+          <div class="live-card-sub">Public — proxies live data from data.gov.sg (National Environment Agency). No login needed.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="centresSearch" placeholder="Search e.g. Bedok" />
+            <input class="form-input" type="number" id="centresLimit" placeholder="Limit (default 5)" />
+          </div>
+          <button class="btn-submit" onclick="searchCentres()">🔎 Search NEA Open Data</button>
+
+          <div class="live-result" id="centresResult"></div>
+        </div>
+
+        <!-- ══════════ KYRA — Stalls, Feedback, Complaints ══════════ -->
+        <div style="font-weight:800; font-size:.95rem; color:var(--text-main); margin:10px 0 -6px; padding-top:14px; border-top:1px solid var(--border);">Kyra — Stalls, Feedback &amp; Complaints</div>
+
+        <!-- STALLS (full CRUD) -->
+        <div class="live-card">
+          <div class="live-card-title">Food Stalls <span class="live-endpoint-tag">/api/v1/stalls</span><span class="live-owner-tag">Kyra</span></div>
+          <div class="live-card-sub">List/view are public. Create requires Operator/Admin login above. Update requires the owning Vendor, or Operator/Admin. Delete requires Operator/Admin.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="stallCentreId" placeholder="Centre ID (e.g. 1, create only)" />
+            <input class="form-input" type="number" id="stallOwnerId" placeholder="Owner UserID (Vendor, create only)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="stallName" placeholder="Stall name" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="stallDescription" placeholder="Description (optional)" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createStall()">+ Create Stall</button>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="stallId" placeholder="Stall ID (view/update/delete)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <button class="btn-secondary" onclick="listStalls()">List All Stalls</button>
+            <button class="btn-secondary" onclick="viewStall()">View Stall + Menu</button>
+            <button class="btn-mini edit" onclick="updateStall()">Update (uses name/description above)</button>
+            <button class="btn-mini del" onclick="deleteStall()">Delete</button>
+          </div>
+
+          <div class="live-result" id="stallResult"></div>
+        </div>
+
+        <!-- FEEDBACK (full CRUD) -->
+        <div class="live-card">
+          <div class="live-card-title">Feedback <span class="live-endpoint-tag">/api/v1/feedback</span><span class="live-owner-tag">Kyra</span></div>
+          <div class="live-card-sub">Submit/edit/delete require a Patron login above. Edit reuses the rating/comments fields — fill them in, then click Edit on a row.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="feedbackStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="number" min="1" max="5" id="feedbackRating" placeholder="Rating 1-5" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="feedbackComments" placeholder="Comments (optional)" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createFeedback()">+ Submit Feedback</button>
+          <button class="btn-secondary" onclick="loadFeedback()">View Feedback for Stall ID above</button>
+
+          <div class="live-result" id="feedbackResult"></div>
+        </div>
+
+        <!-- COMPLAINTS -->
+        <div class="live-card">
+          <div class="live-card-title">Complaints <span class="live-endpoint-tag">/api/v1/complaints</span><span class="live-owner-tag">Kyra</span></div>
+          <div class="live-card-sub">Lodging a complaint / viewing your own history needs a Patron login above; updating status needs Operator/Admin.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="complaintStallId" placeholder="Stall ID (e.g. 1)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="complaintDescription" placeholder="Description (min 10 characters)" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createComplaint()">+ Lodge Complaint</button>
+          <button class="btn-secondary" onclick="loadMyComplaints()">View My Complaints</button>
+
+          <div class="live-result" id="complaintResult"></div>
+
+          <div class="form-row" style="margin:14px 0 10px;">
+            <input class="form-input" type="number" id="complaintUpdateId" placeholder="Complaint ID" />
+            <select class="form-input" id="complaintNewStatus">
+              <option value="Open">Open</option>
+              <option value="Investigating">Investigating</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Dismissed">Dismissed</option>
+            </select>
+          </div>
+          <button class="btn-mini edit" onclick="updateComplaintStatus()">Update Status (Operator/Admin login)</button>
+        </div>
+
+        <!-- ══════════ WAYNE — Menu, Orders ══════════ -->
+        <div style="font-weight:800; font-size:.95rem; color:var(--text-main); margin:10px 0 -6px; padding-top:14px; border-top:1px solid var(--border);">Wayne — Menu &amp; Orders</div>
+
+        <!-- MENU (full CRUD) -->
+        <div class="live-card">
+          <div class="live-card-title">Menu Items <span class="live-endpoint-tag">/api/v1/menu</span><span class="live-owner-tag">Wayne</span></div>
+          <div class="live-card-sub">Create/update/delete require a Vendor login above, for a stall you own. Cuisine IDs are optional, comma-separated — use List Cuisines below to look them up.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="menuStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="text" id="menuItemName" placeholder="Item name" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" step="0.01" id="menuPrice" placeholder="Price" />
+            <select class="form-input" id="menuCategory">
+              <option value="Main">Main</option>
+              <option value="Drink">Drink</option>
+              <option value="Dessert">Dessert</option>
+              <option value="Side">Side</option>
+            </select>
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="menuCuisineIds" placeholder="Cuisine IDs, comma-separated (optional, e.g. 1,4)" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createMenuItem()">+ Create Item</button>
+          <button class="btn-secondary" style="margin-bottom:10px;" onclick="listCuisines()">List Cuisines</button>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="menuItemId" placeholder="Item ID (view/update/delete)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <button class="btn-secondary" onclick="viewMenuItem()">View</button>
+            <button class="btn-mini edit" onclick="updateMenuItem()">Update (uses fields above)</button>
+            <button class="btn-mini del" onclick="deleteMenuItem()">Delete</button>
+          </div>
+
+          <div class="live-result" id="menuResult"></div>
+        </div>
+
+        <!-- ORDERS -->
+        <div class="live-card">
+          <div class="live-card-title">Orders <span class="live-endpoint-tag">/api/v1/orders</span><span class="live-owner-tag">Wayne</span></div>
+          <div class="live-card-sub">Checkout works signed in or as a guest. This is a single-item demo order — the real cart above still uses static data. Status updates need a Vendor login above. Order history needs a Patron login above.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="orderStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="number" id="orderItemId" placeholder="Menu Item ID (e.g. 1)" />
+            <input class="form-input" type="number" id="orderQty" placeholder="Qty" value="1" style="max-width:70px;" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createOrder()">Place Order</button>
+          <button class="btn-secondary" style="margin-bottom:10px;" onclick="loadMyOrders()">My Order History</button>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="orderId" placeholder="Order ID (view/status)" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <button class="btn-secondary" onclick="viewOrder()">View</button>
+            <select class="form-input" id="orderNewStatus" style="max-width:150px;">
+              <option value="Pending">Pending</option>
+              <option value="Preparing">Preparing</option>
+              <option value="Ready">Ready</option>
+              <option value="Collected">Collected</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+            <button class="btn-mini edit" onclick="updateOrderStatus()">Update Status</button>
+          </div>
+
+          <div class="live-result" id="orderResult"></div>
+        </div>
+
+        <!-- CUISINES (read-only lookup) -->
+        <div class="live-card">
+          <div class="live-card-title">Cuisines <span class="live-endpoint-tag">/api/v1/cuisines</span><span class="live-owner-tag">Wayne</span></div>
+          <div class="live-card-sub">Public, read-only. These are the CuisineIDs a Vendor can attach to a menu item above.</div>
+
+          <button class="btn-secondary" onclick="listCuisines()">List All Cuisines</button>
+
+          <div class="live-result" id="cuisineResult"></div>
+        </div>
+
+        <!-- ══════════ JEREMIAH — Inspections, Promotions ══════════ -->
+        <div style="font-weight:800; font-size:.95rem; color:var(--text-main); margin:10px 0 -6px; padding-top:14px; border-top:1px solid var(--border);">Jeremiah — Inspections &amp; Promotions</div>
+
+        <!-- INSPECTIONS (full CRUD) -->
+        <div class="live-card">
+          <div class="live-card-title">Hygiene Inspections <span class="live-endpoint-tag">/api/v1/inspections</span><span class="live-owner-tag">Jeremiah</span></div>
+          <div class="live-card-sub">Logging, amending, or deleting an inspection requires an NEA Officer login above.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="inspectionStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="number" min="0" max="100" id="inspectionScore" placeholder="Score 0-100" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="text" id="inspectionRemarks" placeholder="Remarks (optional)" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createInspection()">+ Log Inspection</button>
+          <button class="btn-secondary" onclick="loadInspections()">View History for Stall ID above</button>
+
+          <div class="live-result" id="inspectionResult"></div>
+        </div>
+
+        <!-- PROMOTIONS -->
+        <div class="live-card">
+          <div class="live-card-title">Promotions <span class="live-endpoint-tag">/api/v1/promotions</span><span class="live-owner-tag">Jeremiah</span></div>
+          <div class="live-card-sub">Create/edit/delete require a Vendor login above, for a stall you own. Edit reuses the title/discount/dates fields above — fill them in, then click Edit on a row.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="promoStallId" placeholder="Stall ID (e.g. 1)" />
+            <input class="form-input" type="text" id="promoTitle" placeholder="Title" />
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" min="1" max="100" id="promoDiscount" placeholder="Discount %" />
+            <input class="form-input" type="date" id="promoStartDate" />
+            <input class="form-input" type="date" id="promoEndDate" />
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createPromotion()">+ Create Promotion</button>
+          <button class="btn-secondary" onclick="loadPromotions()">View for Stall ID above</button>
+
+          <div class="live-result" id="promoResult"></div>
+        </div>
+
+        <!-- ══════════ KENNETH — Payments ══════════ -->
+        <div style="font-weight:800; font-size:.95rem; color:var(--text-main); margin:10px 0 -6px; padding-top:14px; border-top:1px solid var(--border);">Kenneth — Payments</div>
+
+        <div class="live-card">
+          <div class="live-card-title">Payments <span class="live-endpoint-tag">/api/v1/payments</span><span class="live-owner-tag">Kenneth</span></div>
+          <div class="live-card-sub">Create/view/update work for any signed-in role. Delete is restricted to Operator/Admin — reversing a payment is a bigger deal than creating one. Simulated gateway — no real charges.</div>
+
+          <div class="form-row" style="margin-bottom:10px;">
+            <input class="form-input" type="number" id="paymentOrderId" placeholder="Order ID (e.g. 1)" />
+            <select class="form-input" id="paymentMethod">
+              <option value="Cash">Cash</option>
+              <option value="NETS">NETS</option>
+              <option value="PayNow">PayNow</option>
+              <option value="CreditCard">CreditCard</option>
+            </select>
+          </div>
+          <button class="btn-submit" style="margin-bottom:10px;" onclick="createPayment()">+ Create Payment</button>
+          <button class="btn-secondary" onclick="viewPayment()">View Payment for Order ID above</button>
+
+          <div class="form-row" style="margin:14px 0 10px;">
+            <input class="form-input" type="number" id="paymentUpdateId" placeholder="Payment ID (status/delete)" />
+            <select class="form-input" id="paymentNewStatus" style="max-width:130px;">
+              <option value="Pending">Pending</option>
+              <option value="Success">Success</option>
+              <option value="Failed">Failed</option>
+            </select>
+          </div>
+          <div class="form-row" style="margin-bottom:10px;">
+            <button class="btn-mini edit" onclick="updatePaymentStatus()">Update Status</button>
+            <button class="btn-mini del" onclick="deletePayment()">Delete (Operator/Admin)</button>
+          </div>
+
+          <div class="live-result" id="paymentResult"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Cart Overlay & Drawer ──────────────────── -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <div>
+        <div class="cart-header-title">Your Order Chit</div>
+        <div class="cart-header-sub" id="cartDrawerMeta">Nothing added yet</div>
+      </div>
+      <button class="btn-close-cart" onclick="closeCart()">✕</button>
+    </div>
+
+    <div class="cart-chit">
+      <div class="chit-header">
+        <div class="chit-title">HawkerHub</div>
+        <div class="chit-sub">Tanjong Pagar Hawker Centre · Table 7</div>
+      </div>
+      <div id="cartItems">
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <div class="cart-empty-text">Your order chit is empty.<br/>Add items from the menu!</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total (excl. GST)</span>
+        <span class="cart-total-amount" id="cartTotal">S$0.00</span>
+      </div>
+      <button class="btn-checkout" onclick="showToast('🚀 Checkout will be live after backend integration!')">
+        Proceed to Checkout →
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Toast Container ────────────────────────── -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ── Footer ─────────────────────────────────── -->
+  <footer class="site-footer">
+    <strong>HawkerHub</strong> · Singapore Digital Hawker Ordering Platform · Demo Build v0.1
+    <br/>Menu/cart above use static demo data. The "Live Backend" tab makes real API calls — see credit.html for data sources.
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════════
+    //  HARDCODED DATA  ← edit here for the demo
+    // ══════════════════════════════════════════════
+    const STALLS = [
+      {
+        id: "chicken-rice-stall",
+        name: "Ah Lian Chicken Rice",
+        emoji: "🍚",
+        avatarBg: "#FEF3C7",
+        rating: 4.8,
+        reviewCount: 312,
+        wait: "~10 min",
+        tags: ["Chicken Rice", "Hawker Classic", "Halal-Friendly"],
+        items: [
+          {
+            id: "cr-1",
+            name: "Hainanese Chicken Rice (White)",
+            desc: "Silky poached chicken over fragrant pandan-infused rice, served with ginger paste, dark soy, and chilli sauce.",
+            price: 5.50,
+            img: "https://images.unsplash.com/photo-1569058242272-5c99f17a92c7?w=600&q=80",
+            badge: "Best Seller"
+          },
+          {
+            id: "cr-2",
+            name: "Roasted Chicken Rice",
+            desc: "Char-roasted chicken with crispy, golden skin and smoky aroma over a heaping bowl of rich chicken fat rice.",
+            price: 5.50,
+            img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&q=80",
+            badge: null
+          },
+          {
+            id: "cr-3",
+            name: "Chicken Rice Set (Soup + Beansprouts)",
+            desc: "Classic plate with a generous serving of steamed chicken, a warm bowl of light chicken broth, and blanched beansprouts.",
+            price: 7.00,
+            img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80",
+            badge: "Popular"
+          }
+        ]
+      },
+      {
+        id: "noodle-bar",
+        name: "Uncle Tian Noodle Bar",
+        emoji: "🍜",
+        avatarBg: "#D8F3DC",
+        rating: 4.6,
+        reviewCount: 187,
+        wait: "~15 min",
+        tags: ["Laksa", "Char Kway Teow", "Noodles"],
+        items: [
+          {
+            id: "nb-1",
+            name: "Katong Laksa",
+            desc: "Rich coconut curry broth with thick rice noodles (cut short, Katong-style), cockles, prawns, and fish cake.",
+            price: 6.50,
+            img: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=600&q=80",
+            badge: "Spicy 🌶️"
+          },
+          {
+            id: "nb-2",
+            name: "Char Kway Teow",
+            desc: "Wok-fried flat rice noodles with lap cheong, eggs, beansprouts, and cockles. Smoky wok-hei in every bite.",
+            price: 5.00,
+            img: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80",
+            badge: "Wok Hei"
+          },
+          {
+            id: "nb-3",
+            name: "Prawn Mee (Dry)",
+            desc: "Springy yellow noodles tossed in a robust, savoury prawn paste sauce, topped with fresh prawns and sambal.",
+            price: 7.50,
+            img: "https://images.unsplash.com/photo-1503764654157-72d979d9af2f?w=600&q=80",
+            badge: null
+          }
+        ]
+      },
+      {
+        id: "bbq-corner",
+        name: "Malay BBQ Corner",
+        emoji: "🔥",
+        avatarBg: "#FEE2E2",
+        rating: 4.9,
+        reviewCount: 401,
+        wait: "~20 min",
+        tags: ["Satay", "BBQ", "Nasi Lemak"],
+        items: [
+          {
+            id: "bbq-1",
+            name: "Satay (10 sticks, mixed)",
+            desc: "Tender grilled skewers of marinated chicken and beef, charcoal-grilled and served with rich peanut sauce, ketupat, and cucumber.",
+            price: 9.00,
+            img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600&q=80",
+            badge: "Charcoal Grilled"
+          },
+          {
+            id: "bbq-2",
+            name: "Nasi Lemak Special",
+            desc: "Fragrant coconut rice with crispy fried chicken wing, sambal, ikan bilis, egg, and fresh pineapple slices.",
+            price: 7.50,
+            img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80",
+            badge: "Halal"
+          },
+          {
+            id: "bbq-3",
+            name: "Otah-Otah (3 pcs)",
+            desc: "Spiced fish paste grilled in banana leaf parcels until charred and fragrant. A Peranakan hawker favourite.",
+            price: 4.50,
+            img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80",
+            badge: null
+          }
+        ]
+      }
+    ];
+
+    // ══════════════════════════════════════════════
+    //  CART STATE
+    // ══════════════════════════════════════════════
+    let cart = [];   // { id, name, stallName, price, qty }
+    let currentFilter = 'all';
+    let selectedRating = 0;
+
+    // ══════════════════════════════════════════════
+    //  RENDER MENU
+    // ══════════════════════════════════════════════
+    function renderMenu(filter = 'all') {
+      const wrapper = document.getElementById('stallsWrapper');
+      const stalls = filter === 'all' ? STALLS : STALLS.filter(s => s.id === filter);
+
+      if (stalls.length === 0) {
+        wrapper.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--text-muted)">
+          <div style="font-size:2rem;margin-bottom:12px">🔍</div>
+          <div style="font-weight:700;font-size:1rem">No stalls found</div>
+          <div style="font-size:.875rem;margin-top:6px">Try a different filter</div>
+        </div>`;
+        return;
+      }
+
+      wrapper.innerHTML = stalls.map(stall => `
+        <div class="stall-section" id="stall-${stall.id}">
+          <div class="stall-card-header">
+            <div class="stall-avatar" style="background:${stall.avatarBg}">${stall.emoji}</div>
+            <div class="stall-info">
+              <div class="stall-name">${stall.name}</div>
+              <div class="stall-meta">
+                <span class="stall-rating">★ ${stall.rating} <span style="color:var(--text-muted);font-weight:400">(${stall.reviewCount} reviews)</span></span>
+                <span class="stall-wait">⏱ ${stall.wait}</span>
+                <span class="badge-open">Open Now</span>
+              </div>
+              <div class="stall-tags" style="margin-top:8px">
+                ${stall.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-grid">
+            ${stall.items.map(item => `
+              <div class="menu-card" id="card-${item.id}">
+                <div class="menu-img-wrap">
+                  <img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80'" />
+                  ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
+                </div>
+                <div class="menu-body">
+                  <div class="menu-name">${item.name}</div>
+                  <div class="menu-desc">${item.desc}</div>
+                  <div class="menu-footer">
+                    <div class="menu-price"><sup>S$</sup>${item.price.toFixed(2)}</div>
+                    <button class="btn-add" onclick="addToCart('${item.id}', '${item.name.replace(/'/g,"\\'")}', '${stall.name.replace(/'/g,"\\'")}', ${item.price})">
+                      + Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('<hr class="divider" />');
+    }
+
+    // ══════════════════════════════════════════════
+    //  CART LOGIC
+    // ══════════════════════════════════════════════
+    function addToCart(id, name, stallName, price) {
+      const existing = cart.find(i => i.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id, name, stallName, price, qty: 1 });
+      }
+      updateCartUI();
+      showToast(`🛒 <strong>${name}</strong> added to your order!`);
+
+      // Mini bounce on the card
+      const card = document.getElementById(`card-${id}`);
+      if (card) {
+        card.style.transition = 'box-shadow .2s, transform .2s';
+        card.style.transform = 'scale(1.025)';
+        card.style.boxShadow = '0 0 0 2px var(--amber)';
+        setTimeout(() => {
+          card.style.transform = '';
+          card.style.boxShadow = '';
+        }, 300);
+      }
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+      const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+      document.getElementById('cartCount').textContent = totalQty;
+
+      const itemsEl = document.getElementById('cartItems');
+      const footerEl = document.getElementById('cartFooter');
+      const metaEl  = document.getElementById('cartDrawerMeta');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <div class="cart-empty-text">Your order chit is empty.<br/>Add items from the menu!</div>
+        </div>`;
+        footerEl.style.display = 'none';
+        metaEl.textContent = 'Nothing added yet';
+      } else {
+        metaEl.textContent = `${totalQty} item${totalQty !== 1 ? 's' : ''} · S$${totalPrice.toFixed(2)}`;
+        itemsEl.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <div class="cart-item-qty">${item.qty}×</div>
+            <div style="flex:1">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-stall">${item.stallName}</div>
+            </div>
+            <div class="cart-item-price">S$${(item.price * item.qty).toFixed(2)}</div>
+            <button class="btn-remove-item" onclick="removeFromCart('${item.id}')" aria-label="Remove">✕</button>
+          </div>
+        `).join('');
+        footerEl.style.display = 'block';
+        document.getElementById('cartTotal').textContent = `S$${totalPrice.toFixed(2)}`;
+      }
+    }
+
+    function openCart() {
+      document.getElementById('cartOverlay').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+    }
+
+    function closeCart() {
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+    }
+
+    // ══════════════════════════════════════════════
+    //  FILTERS & SEARCH
+    // ══════════════════════════════════════════════
+    function filterTab(stallId, btn) {
+      currentFilter = stallId;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderMenu(stallId);
+      document.getElementById('searchInput').value = '';
+    }
+
+    function filterMenu() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!q) { renderMenu(currentFilter); return; }
+
+      const wrapper = document.getElementById('stallsWrapper');
+      const results = [];
+
+      STALLS.forEach(stall => {
+        const matchedItems = stall.items.filter(item =>
+          item.name.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q) ||
+          stall.name.toLowerCase().includes(q) ||
+          stall.tags.some(t => t.toLowerCase().includes(q))
+        );
+        if (matchedItems.length > 0) results.push({ ...stall, items: matchedItems });
+      });
+
+      if (results.length === 0) {
+        wrapper.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--text-muted)">
+          <div style="font-size:2.5rem;margin-bottom:12px">🔍</div>
+          <div style="font-weight:700;font-size:1rem;color:var(--text-main)">No results for "<em>${q}</em>"</div>
+          <div style="font-size:.875rem;margin-top:8px">Try "chicken rice", "laksa", or "satay"</div>
+        </div>`;
+        return;
+      }
+
+      // Reuse renderMenu logic with filtered results
+      wrapper.innerHTML = results.map(stall => `
+        <div class="stall-section">
+          <div class="stall-card-header">
+            <div class="stall-avatar" style="background:${stall.avatarBg}">${stall.emoji}</div>
+            <div class="stall-info">
+              <div class="stall-name">${stall.name}</div>
+              <div class="stall-meta">
+                <span class="stall-rating">★ ${stall.rating}</span>
+                <span class="stall-wait">⏱ ${stall.wait}</span>
+                <span class="badge-open">Open Now</span>
+              </div>
+            </div>
+          </div>
+          <div class="menu-grid">
+            ${stall.items.map(item => `
+              <div class="menu-card" id="card-${item.id}">
+                <div class="menu-img-wrap">
+                  <img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80'" />
+                  ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
+                </div>
+                <div class="menu-body">
+                  <div class="menu-name">${item.name}</div>
+                  <div class="menu-desc">${item.desc}</div>
+                  <div class="menu-footer">
+                    <div class="menu-price"><sup>S$</sup>${item.price.toFixed(2)}</div>
+                    <button class="btn-add" onclick="addToCart('${item.id}', '${item.name.replace(/'/g,"\\'")}', '${stall.name.replace(/'/g,"\\'")}', ${item.price})">+ Add</button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('<hr class="divider" />');
+    }
+
+    // Enter key on search
+    document.getElementById('searchInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') filterMenu();
+    });
+
+    // ══════════════════════════════════════════════
+    //  FEEDBACK / STAR RATING
+    // ══════════════════════════════════════════════
+    const STAR_LABELS = ['', 'Poor', 'Below average', 'Average', 'Good', 'Excellent!'];
+
+    function setRating(val) {
+      selectedRating = val;
+      document.querySelectorAll('.star-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
+      });
+      document.getElementById('starLabel').textContent = STAR_LABELS[val];
+    }
+
+    // Star hover preview
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', () => {
+        const hoverVal = parseInt(btn.dataset.val);
+        document.querySelectorAll('.star-btn').forEach(b => {
+          b.style.color = parseInt(b.dataset.val) <= hoverVal ? 'var(--star)' : '#D1D5DB';
+        });
+        document.getElementById('starLabel').textContent = STAR_LABELS[hoverVal];
+      });
+      btn.addEventListener('mouseleave', () => {
+        document.querySelectorAll('.star-btn').forEach(b => {
+          b.classList.toggle('active', parseInt(b.dataset.val) <= selectedRating);
+          b.style.color = '';
+        });
+        document.getElementById('starLabel').textContent = selectedRating > 0 ? STAR_LABELS[selectedRating] : 'Tap to rate';
+      });
+    });
+
+    function updateCharCount() {
+      const val = document.getElementById('feedbackText').value.length;
+      document.getElementById('charCount').textContent = val;
+    }
+
+    function submitFeedback() {
+      const stall   = document.getElementById('feedbackStall').value;
+      const comment = document.getElementById('feedbackText').value.trim();
+
+      if (!stall) {
+        showToast('⚠️ Please select a stall to rate.'); return;
+      }
+      if (selectedRating === 0) {
+        showToast('⭐ Please select a star rating.'); return;
+      }
+      if (comment.length < 10) {
+        showToast('✏️ Please write at least 10 characters.'); return;
+      }
+
+      // Simulate submission delay
+      const btn = document.querySelector('.btn-submit');
+      btn.textContent = 'Submitting…';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('feedbackForm').style.display = 'none';
+        document.getElementById('feedbackSuccess').style.display = 'block';
+        document.getElementById('feedbackSuccess').style.animation = 'toastIn .4s ease forwards';
+        btn.disabled = false;
+      }, 800);
+    }
+
+    function resetFeedback() {
+      document.getElementById('feedbackForm').style.display = 'block';
+      document.getElementById('feedbackSuccess').style.display = 'none';
+      document.getElementById('feedbackStall').value = '';
+      document.getElementById('feedbackText').value = '';
+      document.getElementById('charCount').textContent = '0';
+      document.querySelector('.btn-submit').textContent = '✉️ Submit Feedback';
+      selectedRating = 0;
+      document.querySelectorAll('.star-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.color = '';
+      });
+      document.getElementById('starLabel').textContent = 'Tap to rate';
+    }
+
+    // ══════════════════════════════════════════════
+    //  PAGE SWITCHER
+    // ══════════════════════════════════════════════
+    function switchPage(page, btn) {
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.page-nav-btn').forEach(b => b.classList.remove('active'));
+      const sectionId = page === 'menu' ? 'menuSection' : page === 'feedback' ? 'feedbackSection' : 'liveSection';
+      document.getElementById(sectionId).classList.add('active');
+      document.getElementById('filterBar').style.display = page === 'menu' ? '' : 'none';
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ══════════════════════════════════════════════
+    //  TOAST SYSTEM
+    // ══════════════════════════════════════════════
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<span class="toast-icon">✓</span><span>${msg}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        toast.addEventListener('animationend', () => toast.remove());
+      }, 2800);
+    }
+
+    // ══════════════════════════════════════════════
+    //  INIT
+    // ══════════════════════════════════════════════
+    renderMenu();
+    // ══════════════════════════════════════════════
+    //  LIVE BACKEND INTEGRATION
+    //  Owner: Yongsheng — Rentals, Likes, Analytics, Centres.
+    //  Everything below makes real fetch() calls to the Express API,
+    //  unlike the hardcoded STALLS data used by the menu/cart above.
+    // ══════════════════════════════════════════════
+    const API_BASE = '/api/v1';
+    let authToken = null;
+    let authUser = null; // { email, role }
+
+    async function apiFetch(path, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+
+      const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+      let body = null;
+      try { body = await res.json(); } catch (e) { /* empty body is fine */ }
+
+      if (!res.ok) {
+        const message = (body && body.message) || `Request failed with status ${res.status}`;
+        throw new Error(message);
+      }
+      return body;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    // ── Auth ──────────────────────────────────────
+    function fillDemoAccount() {
+      const email = document.getElementById('demoAccountSelect').value;
+      if (email) {
+        document.getElementById('authEmail').value = email;
+        document.getElementById('authPassword').value = 'Password123!';
+      }
+    }
+
+    async function doLogin() {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      if (!email || !password) {
+        showToast('⚠️ Enter an email and password first.');
+        return;
+      }
+      try {
+        const data = await apiFetch('/users/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+        });
+        authToken = data.token || (data.data && data.data.token);
+        authUser = { email };
+        const bar = document.getElementById('authBar');
+        bar.classList.add('signed-in');
+        document.getElementById('authStatus').innerHTML =
+          `✅ Signed in as <strong>${escapeHtml(email)}</strong><small>JWT attached to Rentals &amp; Analytics requests below</small>`;
+        showToast(`✅ Signed in as ${email}`);
+      } catch (err) {
+        showToast('❌ Login failed: ' + err.message);
+      }
+    }
+
+    function doLogout() {
+      authToken = null;
+      authUser = null;
+      document.getElementById('authBar').classList.remove('signed-in');
+      document.getElementById('authStatus').textContent = 'Not signed in — needed for Rentals & Analytics only';
+      showToast('👋 Signed out');
+    }
+
+    // ── Rentals (full CRUD) ───────────────────────
+    async function createRental() {
+      const stallId = document.getElementById('rentalStallId').value;
+      const monthlyRent = document.getElementById('rentalMonthlyRent').value;
+      const startDate = document.getElementById('rentalStartDate').value;
+      const endDate = document.getElementById('rentalEndDate').value;
+      const box = document.getElementById('rentalResult');
+
+      if (!stallId || !monthlyRent || !startDate || !endDate) {
+        showToast('⚠️ Fill in stall ID, rent, start and end date.');
+        return;
+      }
+      try {
+        const data = await apiFetch('/rentals', {
+          method: 'POST',
+          body: JSON.stringify({
+            stallId: Number(stallId),
+            monthlyRent: Number(monthlyRent),
+            startDate, endDate,
+          }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>✅ Agreement #${data.data.RentalID ?? data.data.AgreementID ?? '?'} created</span><span class="pill ok">201</span></div>`;
+        showToast('✅ Rental agreement created.');
+        loadRentals();
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadRentals() {
+      const stallId = document.getElementById('rentalStallId').value;
+      const box = document.getElementById('rentalResult');
+      if (!stallId) {
+        showToast('⚠️ Enter a Stall ID first.');
+        return;
+      }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/rentals/stall/${stallId}`);
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No rental agreements for this stall yet.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(r => `
+          <div class="live-row">
+            <span>#${r.RentalID ?? r.AgreementID} · S$${r.MonthlyRent}/mo · ${r.Status}</span>
+            <div class="live-row-actions">
+              <button class="btn-mini edit" onclick="updateRentalStatus(${r.RentalID ?? r.AgreementID})">Terminate</button>
+              <button class="btn-mini del" onclick="deleteRental(${r.RentalID ?? r.AgreementID})">Delete</button>
+            </div>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateRentalStatus(id) {
+      try {
+        await apiFetch(`/rentals/${id}`, { method: 'PUT', body: JSON.stringify({ status: 'Terminated' }) });
+        showToast(`✅ Agreement #${id} marked Terminated.`);
+        loadRentals();
+      } catch (err) {
+        showToast('❌ ' + err.message);
+      }
+    }
+
+    async function deleteRental(id) {
+      try {
+        await apiFetch(`/rentals/${id}`, { method: 'DELETE' });
+        showToast(`🗑️ Agreement #${id} deleted.`);
+        loadRentals();
+      } catch (err) {
+        showToast('❌ ' + err.message);
+      }
+    }
+
+    // ── Likes ──────────────────────────────────────
+    async function toggleLike() {
+      const itemId = document.getElementById('likeItemId').value;
+      const box = document.getElementById('likeResult');
+      if (!itemId) { showToast('⚠️ Enter a Menu Item ID.'); return; }
+      try {
+        const data = await apiFetch(`/likes/${itemId}`, { method: 'PUT' });
+        box.className = 'live-result visible';
+        const liked = data.data.liked;
+        box.innerHTML = `<div class="live-row"><span>${liked ? '❤️ Liked' : '🤍 Like removed'} — item #${itemId}</span><span class="pill ok">${data.data.likeCount} total likes</span></div>`;
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function checkLikeCount() {
+      const itemId = document.getElementById('likeItemId').value;
+      const box = document.getElementById('likeResult');
+      if (!itemId) { showToast('⚠️ Enter a Menu Item ID.'); return; }
+      try {
+        const data = await apiFetch(`/likes/${itemId}`);
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Item #${itemId}</span><span class="pill ok">${data.data.likeCount} total likes</span></div>`;
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    // ── Analytics ──────────────────────────────────
+    async function loadAnalytics() {
+      const stallId = document.getElementById('analyticsStallId').value;
+      const box = document.getElementById('analyticsResult');
+      if (!stallId) { showToast('⚠️ Enter a Stall ID.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/analytics/sales/${stallId}`);
+        const d = data.data;
+        const popular = (d.popularItems || []).map(p => `<li>${escapeHtml(p.ItemName || p.itemName)} — ${p.TotalSold ?? p.totalSold ?? ''} sold</li>`).join('') || '<li>No data yet</li>';
+        const peak = (d.peakHours || []).map(p => `<li>${escapeHtml(p.HourOfDay ?? p.hour)}:00 — ${p.OrderCount ?? p.orderCount} orders</li>`).join('') || '<li>No data yet</li>';
+        box.innerHTML = `
+          <div class="live-row"><span>Total Revenue</span><span class="pill ok">S$${d.totalRevenue}</span></div>
+          <div class="live-row"><span>Total Orders</span><span class="pill ok">${d.totalOrders}</span></div>
+          <div style="margin-top:10px;"><strong style="font-size:.8rem;">Popular items</strong><ul style="margin:6px 0 0 18px; font-size:.8rem;">${popular}</ul></div>
+          <div style="margin-top:10px;"><strong style="font-size:.8rem;">Peak hours</strong><ul style="margin:6px 0 0 18px; font-size:.8rem;">${peak}</ul></div>`;
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    // ── Centres (third-party API: data.gov.sg / NEA) ─
+    async function searchCentres() {
+      const search = document.getElementById('centresSearch').value.trim();
+      const limit = document.getElementById('centresLimit').value || 5;
+      const box = document.getElementById('centresResult');
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading from data.gov.sg…</div>';
+      try {
+        const params = new URLSearchParams({ limit });
+        if (search) params.append('search', search);
+        const data = await apiFetch(`/centres/nea?${params.toString()}`);
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No matching NEA centres found.</div>';
+          return;
+        }
+        const cachedPill = data.cached ? '<span class="pill cached">cached</span>' : '<span class="pill ok">live</span>';
+        box.innerHTML = `<div style="margin-bottom:8px; font-size:.75rem;">${cachedPill} ${data.count} of ${data.total} results · source: ${escapeHtml(data.source)}</div>` +
+          data.data.map(c => `
+            <div class="live-row">
+              <span>${escapeHtml(c.name_of_centre || c.name)} <br/><small style="color:var(--text-muted)">${escapeHtml(c.location_of_centre || c.address || '')}</small></span>
+              <span class="pill ok">${c.no_of_stalls ?? '?'} stalls</span>
+            </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    // ══════════ KYRA — Stalls, Feedback, Complaints ══════════
+
+    // ── Stalls (read-only) ────────────────────────
+    async function listStalls() {
+      const box = document.getElementById('stallResult');
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch('/stalls');
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No stalls found.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(s => `
+          <div class="live-row">
+            <span>#${s.StallID} · ${escapeHtml(s.StallName)}</span>
+            <span class="pill ok">${s.AverageRating ? Number(s.AverageRating).toFixed(1) + '★' : 'no ratings'}${s.CurrentHygieneGrade ? ' · Grade ' + s.CurrentHygieneGrade : ''}</span>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function viewStall() {
+      const id = document.getElementById('stallId').value;
+      const box = document.getElementById('stallResult');
+      if (!id) { showToast('Enter a Stall ID.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/stalls/${id}`);
+        const s = data.data;
+        const menu = (s.menu || []).map(m => `<li>${escapeHtml(m.ItemName)} — S$${m.Price}</li>`).join('') || '<li>No menu items yet</li>';
+        box.innerHTML = `
+          <div class="live-row"><span>${escapeHtml(s.StallName)}</span><span class="pill ok">Owner: ${escapeHtml(s.OwnerName || '—')}</span></div>
+          <div style="margin-top:10px;"><strong style="font-size:.8rem;">Menu</strong><ul style="margin:6px 0 0 18px; font-size:.8rem;">${menu}</ul></div>`;
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function createStall() {
+      const centreId = document.getElementById('stallCentreId').value;
+      const ownerId = document.getElementById('stallOwnerId').value;
+      const stallName = document.getElementById('stallName').value;
+      const description = document.getElementById('stallDescription').value;
+      const box = document.getElementById('stallResult');
+      if (!centreId || !ownerId || !stallName) { showToast('Enter Centre ID, Owner UserID and a stall name.'); return; }
+      try {
+        const data = await apiFetch('/stalls', {
+          method: 'POST',
+          body: JSON.stringify({ centreId: Number(centreId), ownerId: Number(ownerId), stallName, description }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Stall #${data.data.StallID} created</span><span class="pill ok">201</span></div>`;
+        showToast('Stall created.');
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateStall() {
+      const id = document.getElementById('stallId').value;
+      const stallName = document.getElementById('stallName').value;
+      const description = document.getElementById('stallDescription').value;
+      if (!id) { showToast('Enter a Stall ID.'); return; }
+      try {
+        const body = {};
+        if (stallName) body.stallName = stallName;
+        if (description) body.description = description;
+        await apiFetch(`/stalls/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        showToast(`Stall #${id} updated.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deleteStall() {
+      const id = document.getElementById('stallId').value;
+      if (!id) { showToast('Enter a Stall ID.'); return; }
+      try {
+        await apiFetch(`/stalls/${id}`, { method: 'DELETE' });
+        showToast(`Stall #${id} deleted.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ── Feedback (full CRUD) ──────────────────────
+    async function createFeedback() {
+      const stallId = document.getElementById('feedbackStallId').value;
+      const rating = document.getElementById('feedbackRating').value;
+      const comments = document.getElementById('feedbackComments').value;
+      const box = document.getElementById('feedbackResult');
+      if (!stallId || !rating) { showToast('Enter a Stall ID and rating.'); return; }
+      try {
+        const data = await apiFetch('/feedback', {
+          method: 'POST',
+          body: JSON.stringify({ stallId: Number(stallId), rating: Number(rating), comments }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Feedback #${data.data.FeedbackID} submitted</span><span class="pill ok">201</span></div>`;
+        showToast('Feedback submitted.');
+        loadFeedback();
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadFeedback() {
+      const stallId = document.getElementById('feedbackStallId').value;
+      const box = document.getElementById('feedbackResult');
+      if (!stallId) { showToast('Enter a Stall ID first.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/feedback/stall/${stallId}`);
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No feedback for this stall yet.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(f => `
+          <div class="live-row">
+            <span>${escapeHtml(f.PatronName)} · ${'★'.repeat(f.Rating)} · ${escapeHtml(f.Comments || '')}</span>
+            <div class="live-row-actions">
+              <button class="btn-mini edit" onclick="updateFeedback(${f.FeedbackID})">Edit</button>
+              <button class="btn-mini del" onclick="deleteFeedback(${f.FeedbackID})">Delete</button>
+            </div>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateFeedback(id) {
+      const rating = document.getElementById('feedbackRating').value;
+      const comments = document.getElementById('feedbackComments').value;
+      try {
+        const body = {};
+        if (rating) body.rating = Number(rating);
+        if (comments) body.comments = comments;
+        await apiFetch(`/feedback/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        showToast(`Feedback #${id} updated.`);
+        loadFeedback();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deleteFeedback(id) {
+      try {
+        await apiFetch(`/feedback/${id}`, { method: 'DELETE' });
+        showToast(`Feedback #${id} deleted.`);
+        loadFeedback();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ── Complaints ─────────────────────────────────
+    async function createComplaint() {
+      const stallId = document.getElementById('complaintStallId').value;
+      const description = document.getElementById('complaintDescription').value;
+      const box = document.getElementById('complaintResult');
+      if (!stallId || !description) { showToast('Enter a Stall ID and description.'); return; }
+      try {
+        const data = await apiFetch('/complaints', {
+          method: 'POST',
+          body: JSON.stringify({ stallId: Number(stallId), description }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Complaint #${data.data.ComplaintID} lodged</span><span class="pill ok">201</span></div>`;
+        showToast('Complaint submitted.');
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadMyComplaints() {
+      const box = document.getElementById('complaintResult');
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch('/complaints/mine');
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No complaints filed yet.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(c => `
+          <div class="live-row">
+            <span>#${c.ComplaintID} · ${escapeHtml(c.StallName || '')} · ${escapeHtml(c.Description)}</span>
+            <span class="pill ok">${escapeHtml(c.Status)}</span>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateComplaintStatus() {
+      const id = document.getElementById('complaintUpdateId').value;
+      const status = document.getElementById('complaintNewStatus').value;
+      if (!id) { showToast('Enter a Complaint ID.'); return; }
+      try {
+        await apiFetch(`/complaints/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+        showToast(`Complaint #${id} marked ${status}.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ══════════ WAYNE — Menu, Orders ══════════
+
+    // ── Menu (full CRUD) ──────────────────────────
+    async function createMenuItem() {
+      const stallId = document.getElementById('menuStallId').value;
+      const itemName = document.getElementById('menuItemName').value;
+      const price = document.getElementById('menuPrice').value;
+      const category = document.getElementById('menuCategory').value;
+      const cuisineIdsRaw = document.getElementById('menuCuisineIds').value;
+      const box = document.getElementById('menuResult');
+      if (!stallId || !itemName || !price) { showToast('Enter Stall ID, item name and price.'); return; }
+      try {
+        const body = { stallId: Number(stallId), itemName, price: Number(price), category };
+        if (cuisineIdsRaw.trim()) {
+          body.cuisineIds = cuisineIdsRaw.split(',').map(s => Number(s.trim())).filter(n => !isNaN(n));
+        }
+        const data = await apiFetch('/menu', { method: 'POST', body: JSON.stringify(body) });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Item #${data.data.ItemID} created</span><span class="pill ok">201</span></div>`;
+        showToast('Menu item created.');
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function viewMenuItem() {
+      const id = document.getElementById('menuItemId').value;
+      const box = document.getElementById('menuResult');
+      if (!id) { showToast('Enter an Item ID.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/menu/${id}`);
+        const m = data.data;
+        const cuisineNames = (m.cuisines || []).map(c => c.Name).join(', ') || 'none tagged';
+        box.innerHTML = `
+          <div class="live-row"><span>${escapeHtml(m.ItemName)} — S$${m.Price}</span><span class="pill ok">${escapeHtml(m.Category)}</span></div>
+          <div style="margin-top:8px; font-size:.8rem; color:var(--text-muted);">Cuisines: ${escapeHtml(cuisineNames)}</div>`;
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function listCuisines() {
+      const box = document.getElementById('cuisineResult');
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch('/cuisines');
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No cuisines found.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(c => `
+          <div class="live-row"><span>${escapeHtml(c.Name)}</span><span class="pill ok">ID ${c.CuisineID}</span></div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateMenuItem() {
+      const id = document.getElementById('menuItemId').value;
+      const itemName = document.getElementById('menuItemName').value;
+      const price = document.getElementById('menuPrice').value;
+      const category = document.getElementById('menuCategory').value;
+      if (!id) { showToast('Enter an Item ID.'); return; }
+      try {
+        const body = {};
+        if (itemName) body.itemName = itemName;
+        if (price) body.price = Number(price);
+        if (category) body.category = category;
+        await apiFetch(`/menu/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        showToast(`Item #${id} updated.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deleteMenuItem() {
+      const id = document.getElementById('menuItemId').value;
+      if (!id) { showToast('Enter an Item ID.'); return; }
+      try {
+        await apiFetch(`/menu/${id}`, { method: 'DELETE' });
+        showToast(`Item #${id} deleted.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ── Orders ─────────────────────────────────────
+    async function createOrder() {
+      const stallId = document.getElementById('orderStallId').value;
+      const itemId = document.getElementById('orderItemId').value;
+      const qty = document.getElementById('orderQty').value || 1;
+      const box = document.getElementById('orderResult');
+      if (!stallId || !itemId) { showToast('Enter a Stall ID and Menu Item ID.'); return; }
+      try {
+        const data = await apiFetch('/orders', {
+          method: 'POST',
+          body: JSON.stringify({
+            stallId: Number(stallId),
+            items: [{ itemId: Number(itemId), quantity: Number(qty) }],
+          }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Order #${data.data.OrderID} placed</span><span class="pill ok">S$${data.data.TotalAmount}</span></div>`;
+        showToast('Order placed.');
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function viewOrder() {
+      const id = document.getElementById('orderId').value;
+      const box = document.getElementById('orderResult');
+      if (!id) { showToast('Enter an Order ID.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/orders/${id}`);
+        const o = data.data;
+        const items = (o.items || []).map(i => `<li>${escapeHtml(i.ItemName)} × ${i.Quantity} — S$${i.Subtotal}</li>`).join('') || '<li>No items</li>';
+        box.innerHTML = `
+          <div class="live-row"><span>Order #${o.OrderID}</span><span class="pill ok">${escapeHtml(o.Status)}</span></div>
+          <div style="margin-top:10px;"><strong style="font-size:.8rem;">Items</strong><ul style="margin:6px 0 0 18px; font-size:.8rem;">${items}</ul></div>`;
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadMyOrders() {
+      const box = document.getElementById('orderResult');
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch('/orders/mine');
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No past orders yet.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(o => `
+          <div class="live-row">
+            <span>#${o.OrderID} · ${escapeHtml(o.StallName)} · S$${o.TotalAmount}</span>
+            <span class="pill ok">${escapeHtml(o.OrderStatus)}</span>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateOrderStatus() {
+      const id = document.getElementById('orderId').value;
+      const status = document.getElementById('orderNewStatus').value;
+      if (!id) { showToast('Enter an Order ID.'); return; }
+      try {
+        await apiFetch(`/orders/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+        showToast(`Order #${id} marked ${status}.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ══════════ JEREMIAH — Inspections, Promotions ══════════
+
+    // ── Inspections (full CRUD) ───────────────────
+    async function createInspection() {
+      const stallId = document.getElementById('inspectionStallId').value;
+      const score = document.getElementById('inspectionScore').value;
+      const remarks = document.getElementById('inspectionRemarks').value;
+      const box = document.getElementById('inspectionResult');
+      if (!stallId || score === '') { showToast('Enter a Stall ID and score.'); return; }
+      try {
+        const data = await apiFetch('/inspections', {
+          method: 'POST',
+          body: JSON.stringify({ stallId: Number(stallId), score: Number(score), remarks }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Inspection #${data.data.InspectionID} logged</span><span class="pill ok">Grade ${data.data.grade ? data.data.grade.Grade : '?'}</span></div>`;
+        showToast('Inspection recorded.');
+        loadInspections();
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadInspections() {
+      const stallId = document.getElementById('inspectionStallId').value;
+      const box = document.getElementById('inspectionResult');
+      if (!stallId) { showToast('Enter a Stall ID first.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/inspections/stall/${stallId}`);
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No inspections for this stall yet.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(i => `
+          <div class="live-row">
+            <span>#${i.InspectionID} · Score ${i.Score} · ${escapeHtml(i.Remarks || '')}</span>
+            <div class="live-row-actions">
+              <button class="btn-mini edit" onclick="updateInspection(${i.InspectionID})">Edit</button>
+              <button class="btn-mini del" onclick="deleteInspection(${i.InspectionID})">Delete</button>
+            </div>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updateInspection(id) {
+      const score = document.getElementById('inspectionScore').value;
+      const remarks = document.getElementById('inspectionRemarks').value;
+      try {
+        const body = {};
+        if (score !== '') body.score = Number(score);
+        if (remarks) body.remarks = remarks;
+        await apiFetch(`/inspections/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        showToast(`Inspection #${id} updated.`);
+        loadInspections();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deleteInspection(id) {
+      try {
+        await apiFetch(`/inspections/${id}`, { method: 'DELETE' });
+        showToast(`Inspection #${id} deleted.`);
+        loadInspections();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ── Promotions ─────────────────────────────────
+    async function createPromotion() {
+      const stallId = document.getElementById('promoStallId').value;
+      const title = document.getElementById('promoTitle').value;
+      const discountPercentage = document.getElementById('promoDiscount').value;
+      const startDate = document.getElementById('promoStartDate').value;
+      const endDate = document.getElementById('promoEndDate').value;
+      const box = document.getElementById('promoResult');
+      if (!stallId || !title || !discountPercentage || !startDate || !endDate) {
+        showToast('Fill in stall ID, title, discount, start and end date.');
+        return;
+      }
+      try {
+        const data = await apiFetch('/promotions', {
+          method: 'POST',
+          body: JSON.stringify({ stallId: Number(stallId), title, discountPercentage: Number(discountPercentage), startDate, endDate }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Promotion #${data.data.PromoID} created</span><span class="pill ok">201</span></div>`;
+        showToast('Promotion created.');
+        loadPromotions();
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function loadPromotions() {
+      const stallId = document.getElementById('promoStallId').value;
+      const box = document.getElementById('promoResult');
+      if (!stallId) { showToast('Enter a Stall ID first.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/promotions/stall/${stallId}`);
+        if (!data.data || data.data.length === 0) {
+          box.innerHTML = '<div class="live-empty">No promotions for this stall right now.</div>';
+          return;
+        }
+        box.innerHTML = data.data.map(p => `
+          <div class="live-row">
+            <span>#${p.PromoID} · ${escapeHtml(p.Title)} · ${p.DiscountPercentage}% off</span>
+            <div class="live-row-actions">
+              <button class="btn-mini edit" onclick="updatePromotion(${p.PromoID})">Edit</button>
+              <button class="btn-mini del" onclick="deletePromotion(${p.PromoID})">Delete</button>
+            </div>
+          </div>`).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updatePromotion(id) {
+      const title = document.getElementById('promoTitle').value;
+      const discountPercentage = document.getElementById('promoDiscount').value;
+      const startDate = document.getElementById('promoStartDate').value;
+      const endDate = document.getElementById('promoEndDate').value;
+      try {
+        const body = {};
+        if (title) body.title = title;
+        if (discountPercentage) body.discountPercentage = Number(discountPercentage);
+        if (startDate) body.startDate = startDate;
+        if (endDate) body.endDate = endDate;
+        await apiFetch(`/promotions/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        showToast(`Promotion #${id} updated.`);
+        loadPromotions();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deletePromotion(id) {
+      try {
+        await apiFetch(`/promotions/${id}`, { method: 'DELETE' });
+        showToast(`Promotion #${id} deleted.`);
+        loadPromotions();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    // ══════════ KENNETH — Payments ══════════
+    async function createPayment() {
+      const orderId = document.getElementById('paymentOrderId').value;
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const box = document.getElementById('paymentResult');
+      if (!orderId) { showToast('Enter an Order ID.'); return; }
+      try {
+        const data = await apiFetch('/payments', {
+          method: 'POST',
+          body: JSON.stringify({ orderId: Number(orderId), paymentMethod }),
+        });
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-row"><span>Payment #${data.data.PaymentID} · ${escapeHtml(data.data.PaymentStatus)}</span><span class="pill ok">S$${data.data.Amount}</span></div>`;
+        showToast('Payment processed.');
+      } catch (err) {
+        box.className = 'live-result visible';
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function viewPayment() {
+      const orderId = document.getElementById('paymentOrderId').value;
+      const box = document.getElementById('paymentResult');
+      if (!orderId) { showToast('Enter an Order ID.'); return; }
+      box.className = 'live-result visible';
+      box.innerHTML = '<div class="live-empty">Loading…</div>';
+      try {
+        const data = await apiFetch(`/payments/${orderId}`);
+        const p = data.data;
+        box.innerHTML = `<div class="live-row"><span>Payment #${p.PaymentID} · ${escapeHtml(p.PaymentMethod)}</span><span class="pill ok">${escapeHtml(p.PaymentStatus)}</span></div>`;
+      } catch (err) {
+        box.innerHTML = `<div class="live-error">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function updatePaymentStatus() {
+      const id = document.getElementById('paymentUpdateId').value;
+      const status = document.getElementById('paymentNewStatus').value;
+      if (!id) { showToast('Enter a Payment ID.'); return; }
+      try {
+        await apiFetch(`/payments/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+        showToast(`Payment #${id} marked ${status}.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deletePayment() {
+      const id = document.getElementById('paymentUpdateId').value;
+      if (!id) { showToast('Enter a Payment ID.'); return; }
+      try {
+        await apiFetch(`/payments/${id}`, { method: 'DELETE' });
+        showToast(`Payment #${id} deleted.`);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+  </script>
+</body>
+</html>
